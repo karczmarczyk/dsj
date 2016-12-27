@@ -1,0 +1,36 @@
+#skocznia {
+    width:1200px;
+    height: 600px;
+    background-color: skyblue;
+    position: relative;
+}
+
+#container {
+    width:1200px;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+#skoczek {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 65px;
+}
+
+#punkt-ladowania {
+    width: 5px;
+    height: 5px;
+    background-color: green;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    /*display: none;*/
+}
+
+#distance {
+    font-size: 20px;
+}

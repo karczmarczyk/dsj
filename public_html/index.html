@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DSJ</title>
+        <script src="js/jquery.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="container">
+            <canvas id="skocznia" width="1200" height="600"></canvas>
+            <div id="skoczek"></div>
+            <div id="punkt-ladowania"></div>
+        </div>
+        <div id="distance">0</div>
+        <script>
+            var iProg = 15;
+            var distance = 0;
+            var land = 0;
+            $(document).ready(function(){
+                var p = [0,0];
+                s = rysujSkocznie(p[0],p[1]);
+                p = rysujZeskok(s[0],s[1]);
+                $(document).click(function () {
+                    //r = rysujSkok(p[0],p[1]);
+                    zaczynaj(0,0);
+                });
+            });
+            
+            function skacz(x,y)
+            {
+                y = y-10;
+                $( "#skoczek" ).animate({
+                    left: x+"px",
+                    top: y+"px"
+                }, {
+                    duration: 50,
+                    queue: true
+                });
+            }
+            
+            function lodowanie (x,y)
+            {
+                setTimeout(function(){
+                    $( "#punkt-ladowania" ).animate({
+                        left: x+"px",
+                        top: y+"px"
+                    }, {
+                        duration: 0,
+                        queue: true
+                    });
+                },2000);
+            }
+            
+            function zaczynaj(x,y)
+            {
+                land = 0;
+                var v = randomFromInterval(3.4,3.5);
+                var z = randomFromInterval(0.8,0.9);
+                var c=document.getElementById("skocznia");
+                for (x=0;x<=60;x++) {
+                    if (x<=iProg) {
+                        p = funSkocznia(x);
+                    } else {
+                        zeskok = funZeskok(x);
+                        skokOrig = funSkok (x, v, z);
+                        skok = przesuniecie(skokOrig[0],skokOrig[1]);
+                        if (skok[1]>zeskok[1]) {
+                            p = zeskok;
+                            if (land == 0) {
+                                land = 1;
+                                $('#distance').text(p[0]);
+                                lodowanie (p[0],p[1]);
+                                //$('#distance').toggle( "pulsate" );
+                            }
+                        } else {
+                            p = skok;
+                        }
+                    }
+                    console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+                    skacz(p[0],p[1]);
+                }
+                return [p[0],p[1]];
+            }
+            
+            function randomFromInterval(min,max)
+            {
+                return Math.random()*(max-min+1)+min;
+            }
+            
+            function funSkok (x, v, z)
+            {
+                x = x-iProg;
+                var alfa = z*Math.PI/2-0.001;
+                var g = 9.80665;//grawitaja
+                var v0 = v;//3.5;//const
+                y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
+                pX = x*20;
+                pY = -1*y;
+                return [pX,pY,x,y];
+            }
+            
+            function punktProg ()
+            {
+                return funSkocznia(iProg);
+            }
+            
+            function przesuniecie (x,y) 
+            {
+                prog = punktProg();
+                return [x+prog[0],y+prog[1]];
+            }
+            
+            function rysujSkok (startX,startY) 
+            {
+                var c=document.getElementById("skocznia");
+                var ctx=c.getContext("2d");
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                ctx.strokeStyle = '#ff0000';
+                for (x=0;x<=100;x++) {
+                    if (x<=iProg) {
+                        p = funSkocznia(x);
+                    } else {
+                        zeskok = funZeskok(x);
+                        skokOrig = funSkok (x, 3.5, 0.9);
+                        skok = przesuniecie(skokOrig[0],skokOrig[1]);
+                        if (skok[1]>zeskok[1]) {
+                            p = zeskok;
+                        } else {
+                            p = skok;
+                        }
+                    }
+                    console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+                    ctx.lineTo(p[0],p[1]);
+                }
+                ctx.stroke();
+                return [p[0],p[1]];
+            }
+            
+            function funZeskok (x)
+            {
+                y = Math.sin(1/13*x + 0.3) * 180 - 340;
+                pX = x*20;
+                pY = -1*y;
+                return [pX,pY,x,y];
+            }
+            
+            function funSkocznia (x) 
+            {
+                y = (1)*x*x - 30*x + 75;
+                pX = x*20;
+                pY = -1*y;
+                return [pX,pY,x,y];
+            }
+            
+            function rysujZeskok (startX,startY)
+            {
+                var c=document.getElementById("skocznia");
+                var ctx=c.getContext("2d");
+                ctx.beginPath();
+                ctx.moveTo(startX,startY);
+                for (x=iProg;x<=100;x++) {
+                    p = funZeskok (x);
+                    ctx.lineTo(p[0],p[1]);
+                }
+                ctx.stroke();
+                return [p[0],p[1]];
+            }
+            
+            function rysujSkocznie (startX,startY)
+            {
+                var c=document.getElementById("skocznia");
+                var ctx=c.getContext("2d");
+                ctx.beginPath();
+                ctx.moveTo(startX,startY);
+                for (x=0;x<=iProg;x++) {
+                    p = funSkocznia (x);
+                    ctx.lineTo(p[0],p[1]);
+                }
+                ctx.stroke();
+                return [p[0],p[1]];
+            }
+        </script>
+    </body>
+</html>

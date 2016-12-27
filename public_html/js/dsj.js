@@ -1,4 +1,223 @@
 function Dsj()
 {
+    /* elementy - id */
+    var idSkocznia = 'skocznia';
+    var idPunktLondowania = 'punkt-ladowania';
+    var idDystans = 'distance';
+    var idSkoczek = 'skoczek';
     
+    /* Próg */
+    this.iProg = 15;
+    /* Dystans */
+    this.distance = 0;
+    /* Czy wylondował */
+    this.land = 0;
+    /* Kontener skoczni */
+    this.c=document.getElementById(idSkocznia);
+    /* Rysowanie */
+    this.ctx=this.c.getContext("2d");
+    this.ctx.beginPath();
+    
+    
+    /**
+     * @param {type} x
+     * @param {type} y
+     * @returns {undefined}
+     */
+    this.skacz = function(x,y)
+    {
+        y = y-10;
+        $( "#"+idSkoczek ).animate({
+            left: x+"px",
+            top: y+"px"
+        }, {
+            duration: 50,
+            queue: true
+        });
+    };
+
+    /**
+     * @param {type} x
+     * @param {type} y
+     * @returns {undefined}
+     */
+    this.lodowanie = function(x,y)
+    {
+        setTimeout(function(){
+            $( "#"+idPunktLondowania ).animate({
+                left: x+"px",
+                top: y+"px"
+            }, {
+                duration: 0,
+                queue: true
+            });
+        },2000);
+    };
+
+    /**
+     * @param {type} x
+     * @param {type} y
+     * @returns {Array}
+     */
+    this.zaczynaj = function(x,y)
+    {
+        this.land = 0;
+        var v = this.randomFromInterval(3.4,3.5);
+        var z = this.randomFromInterval(0.8,0.9);
+        for (x=0;x<=60;x++) {
+            if (x<=this.iProg) {
+                p = this.funSkocznia(x);
+            } else {
+                zeskok = this.funZeskok(x);
+                skokOrig = this.funSkok (x, v, z);
+                skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
+                if (skok[1]>zeskok[1]) {
+                    p = zeskok;
+                    if (this.land == 0) {
+                        this.land = 1;
+                        $('#'+idDystans).text(p[0]);
+                        this.lodowanie (p[0],p[1]);
+                        //$('#distance').toggle( "pulsate" );
+                    }
+                } else {
+                    p = skok;
+                }
+            }
+            console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+            this.skacz(p[0],p[1]);
+        }
+        return [p[0],p[1]];
+    };
+
+    /**
+     * @param {type} min
+     * @param {type} max
+     * @returns {Number}
+     */
+    this.randomFromInterval = function (min,max)
+    {
+        return Math.random()*(max-min+1)+min;
+    };
+
+    /**
+     * @param {type} x
+     * @param {type} v
+     * @param {type} z
+     * @returns {Array}
+     */
+    this.funSkok = function(x, v, z)
+    {
+        x = x-this.iProg;
+        var alfa = z*Math.PI/2-0.001;
+        var g = 9.80665;//grawitaja
+        var v0 = v;//3.5;//const
+        y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
+        pX = x*20;
+        pY = -1*y;
+        return [pX,pY,x,y];
+    };
+
+    /**
+     * @returns {Array}
+     */
+    this.punktProg = function()
+    {
+        return this.funSkocznia(this.iProg);
+    };
+
+    /**
+     * @param {type} x
+     * @param {type} y
+     * @returns {Array}
+     */
+    this.przesuniecie = function(x,y) 
+    {
+        prog = this.punktProg();
+        return [x+prog[0],y+prog[1]];
+    };
+
+    /**
+     * @param {type} startX
+     * @param {type} startY
+     * @returns {Array}
+     */
+    this.rysujSkok = function(startX,startY) 
+    {
+        this.ctx.moveTo(0,0);
+        this.ctx.strokeStyle = '#ff0000';
+        for (x=0;x<=100;x++) {
+            if (x<=this.iProg) {
+                p = this.funSkocznia(x);
+            } else {
+                zeskok = this.funZeskok(x);
+                skokOrig = this.funSkok (x, 3.5, 0.9);
+                skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
+                if (skok[1]>zeskok[1]) {
+                    p = zeskok;
+                } else {
+                    p = skok;
+                }
+            }
+            console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+            this.ctx.lineTo(p[0],p[1]);
+        }
+        this.ctx.stroke();
+        return [p[0],p[1]];
+    };
+
+    /**
+     * @param {type} x
+     * @returns {Array}
+     */
+    this.funZeskok = function(x)
+    {
+        y = Math.sin(1/13*x + 0.3) * 180 - 340;
+        pX = x*20;
+        pY = -1*y;
+        return [pX,pY,x,y];
+    };
+
+    /**
+     * @param {type} x
+     * @returns {Array}
+     */
+    this.funSkocznia = function(x) 
+    {
+        y = (1)*x*x - 30*x + 75;
+        pX = x*20;
+        pY = -1*y;
+        return [pX,pY,x,y];
+    };
+
+    /**
+     * @param {type} startX
+     * @param {type} startY
+     * @returns {Array}
+     */
+    this.rysujZeskok = function(startX,startY)
+    {
+        this.ctx.moveTo(startX,startY);
+        for (x=this.iProg;x<=100;x++) {
+            p = this.funZeskok (x);
+            this.ctx.lineTo(p[0],p[1]);
+        }
+        this.ctx.stroke();
+        return [p[0],p[1]];
+    };
+
+    /**
+     * @param {type} startX
+     * @param {type} startY
+     * @returns {Array}
+     */
+    this.rysujSkocznie = function(startX,startY)
+    {
+        this.ctx.moveTo(startX,startY);
+        for (x=0;x<=this.iProg;x++) {
+            p = this.funSkocznia (x);
+            this.ctx.lineTo(p[0],p[1]);
+        }
+        this.ctx.stroke();
+        return [p[0],p[1]];
+    };
 }

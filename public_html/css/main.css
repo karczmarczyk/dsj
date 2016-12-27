@@ -1,14 +1,15 @@
 #skocznia {
-    width:1200px;
-    height: 600px;
+    width:1300px;
+    height: 800px;
     background-color: skyblue;
     position: relative;
 }
 
 #container {
-    width:1200px;
+    width:1300px;
     height: 600px;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
     position: relative;
 }
 

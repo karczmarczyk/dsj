@@ -6,6 +6,14 @@ function Dsj()
     var idDystans = 'distance';
     var idSkoczek = 'skoczek';
     
+    /* skala */
+    var osX = 20;
+    var osXsign = 1;
+    var osY = 1;
+    var osYsign = -1;
+    
+    /* Max iter */
+    this.maxIter = 80;
     /* Próg */
     this.iProg = 15;
     /* Dystans */
@@ -64,20 +72,20 @@ function Dsj()
         this.land = 0;
         var v = this.randomFromInterval(3.4,3.5);
         var z = this.randomFromInterval(0.8,0.9);
-        for (x=0;x<=60;x++) {
+        for (x=0;x<=this.maxIter;x++) {
             if (x<=this.iProg) {
                 p = this.funSkocznia(x);
             } else {
                 zeskok = this.funZeskok(x);
                 skokOrig = this.funSkok (x, v, z);
                 skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
-                if (skok[1]>zeskok[1]) {
+                if (this.land===1 || skok[1]>zeskok[1]) {
                     p = zeskok;
-                    if (this.land == 0) {
+                    if (this.land === 0) {
                         this.land = 1;
                         $('#'+idDystans).text(p[0]);
                         this.lodowanie (p[0],p[1]);
-                        //$('#distance').toggle( "pulsate" );
+                        $('#distance').effect( "pulsate",'slow');
                     }
                 } else {
                     p = skok;
@@ -112,8 +120,8 @@ function Dsj()
         var g = 9.80665;//grawitaja
         var v0 = v;//3.5;//const
         y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
-        pX = x*20;
-        pY = -1*y;
+        pX = osXsign*x*osX;
+        pY = osYsign*osY*y;
         return [pX,pY,x,y];
     };
 
@@ -145,7 +153,7 @@ function Dsj()
     {
         this.ctx.moveTo(0,0);
         this.ctx.strokeStyle = '#ff0000';
-        for (x=0;x<=100;x++) {
+        for (x=0;x<=this.maxIter;x++) {
             if (x<=this.iProg) {
                 p = this.funSkocznia(x);
             } else {
@@ -171,9 +179,9 @@ function Dsj()
      */
     this.funZeskok = function(x)
     {
-        y = Math.sin(1/13*x + 0.3) * 180 - 340;
-        pX = x*20;
-        pY = -1*y;
+        y = Math.sin(1/15*x + 0.5) * 250 - 410;
+        pX = osXsign*x*osX;
+        pY = osYsign*osY*y;
         return [pX,pY,x,y];
     };
 
@@ -184,8 +192,8 @@ function Dsj()
     this.funSkocznia = function(x) 
     {
         y = (1)*x*x - 30*x + 75;
-        pX = x*20;
-        pY = -1*y;
+        pX = osXsign*x*osX;
+        pY = osYsign*osY*y;
         return [pX,pY,x,y];
     };
 
@@ -197,7 +205,7 @@ function Dsj()
     this.rysujZeskok = function(startX,startY)
     {
         this.ctx.moveTo(startX,startY);
-        for (x=this.iProg;x<=100;x++) {
+        for (x=this.iProg;x<=this.maxIter;x++) {
             p = this.funZeskok (x);
             this.ctx.lineTo(p[0],p[1]);
         }

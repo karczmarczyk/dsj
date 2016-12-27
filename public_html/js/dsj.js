@@ -1,4 +1,4 @@
-function Dsj()
+function DsjEngine()
 {
     /* elementy - id */
     var idSkocznia = 'skocznia';
@@ -9,7 +9,7 @@ function Dsj()
     /* skala */
     var osX = 20;
     var osXsign = 1;
-    var osY = 1;
+    var osY = 3/4;
     var osYsign = -1;
     
     /* Max iter */
@@ -20,12 +20,45 @@ function Dsj()
     this.distance = 0;
     /* Czy wylondował */
     this.land = 0;
+    /* punkt londowania */
+    this.landPoint = [0,0];
+    /* Czy leci */
+    this.fly = 0;
+    /* odbicie */
+    this.jump = 0;
+    this.jumpMoment = 0;
+    /* aktualny krok */
+    this.iter = 0;
+    /* rozpoczęto */
+    this.isRun = 0;
+    
     /* Kontener skoczni */
     this.c=document.getElementById(idSkocznia);
+    
     /* Rysowanie */
     this.ctx=this.c.getContext("2d");
     this.ctx.beginPath();
     
+    this.reset = function ()
+    {
+        this.isRun = 0;
+        this.distance = 0;
+        this.fly = 0;
+        this.land = 0;
+        this.jump = 0;
+        this.jumpMoment = 0;
+        this.landPoint = [0,0];
+        
+        $('#'+idDystans).text(this.distance);
+    };
+    
+    this.odbicie = function()
+    {
+        if (this.jump === 1) return;
+        if (this.isRun === 0) return;
+        this.jump = 1;
+        this.jumpMoment = this.iter;
+    };
     
     /**
      * @param {type} x
@@ -34,13 +67,26 @@ function Dsj()
      */
     this.skacz = function(x,y)
     {
+        var that = this;
         y = y-10;
         $( "#"+idSkoczek ).animate({
             left: x+"px",
             top: y+"px"
         }, {
             duration: 50,
-            queue: true
+            //queue: true
+            step: function(now, fx ) {
+//                console.log('animate');
+//                console.log(now);
+//                console.log(fx);
+                console.log(that.jumpMoment);
+                that.ladowanie ();
+            }
+        });
+        
+        $("#"+idSkoczek).queue(function() {
+            console.log('kolejka');
+            $(this).dequeue();
         });
     };
 
@@ -49,17 +95,16 @@ function Dsj()
      * @param {type} y
      * @returns {undefined}
      */
-    this.lodowanie = function(x,y)
+    this.ladowanie = function()
     {
-        setTimeout(function(){
-            $( "#"+idPunktLondowania ).animate({
-                left: x+"px",
-                top: y+"px"
-            }, {
-                duration: 0,
-                queue: true
-            });
-        },2000);
+        if (this.land === 0) return;
+        $( "#"+idPunktLondowania ).animate({
+            left: this.landPoint[0]+"px",
+            top: this.landPoint[1]+"px"
+        }, {
+            duration: 0,
+            //queue: true,
+        });
     };
 
     /**
@@ -69,31 +114,46 @@ function Dsj()
      */
     this.zaczynaj = function(x,y)
     {
-        this.land = 0;
+        this.reset();
+        
+        if (this.isRun === 1) {
+            return;
+        }
+        
         var v = this.randomFromInterval(3.4,3.5);
         var z = this.randomFromInterval(0.8,0.9);
+        /* Poruszanie się */
         for (x=0;x<=this.maxIter;x++) {
-            if (x<=this.iProg) {
+            this.iter = x;
+            if (x<=this.iProg) {//skocznia, przed progiem
+                
                 p = this.funSkocznia(x);
-            } else {
+            } else {//za progiem
+                
                 zeskok = this.funZeskok(x);
                 skokOrig = this.funSkok (x, v, z);
                 skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
-                if (this.land===1 || skok[1]>zeskok[1]) {
+                
+                if (this.land===1 || skok[1]>zeskok[1]) {//lądowanie
                     p = zeskok;
-                    if (this.land === 0) {
+                    if (this.land === 0) {//wylądował
                         this.land = 1;
+                        this.fly = 0;
                         $('#'+idDystans).text(p[0]);
-                        this.lodowanie (p[0],p[1]);
+                        this.landPoint = [p[0],p[1]];
                         $('#distance').effect( "pulsate",'slow');
                     }
-                } else {
+                } else {//w locie
+                    
+                    this.fly = 1;
                     p = skok;
                 }
             }
             console.log('skok ['+x+']: '+p[0]+':'+p[1]);
             this.skacz(p[0],p[1]);
         }
+        
+        this.isRun = 0;
         return [p[0],p[1]];
     };
 

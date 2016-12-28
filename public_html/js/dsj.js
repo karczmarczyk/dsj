@@ -20,6 +20,8 @@ function DsjEngine()
     this.distance = 0;
     /* Czy wylondował */
     this.land = 0;
+    this.correctLand = 0;
+    this.landIter = 0;
     /* punkt londowania */
     this.landPoint = [0,0];
     /* Czy leci */
@@ -39,55 +41,89 @@ function DsjEngine()
     this.ctx=this.c.getContext("2d");
     this.ctx.beginPath();
     
+    /* rzut ukośny */
+    this.v = 0; //prędkość
+    this.z = 0; //kąt odbicia
+    
     this.reset = function ()
     {
+        console.log('RESET');
+        this.iter = 0;
         this.isRun = 0;
         this.distance = 0;
         this.fly = 0;
         this.land = 0;
+        this.correctLand = 0;
         this.jump = 0;
         this.jumpMoment = 0;
         this.landPoint = [0,0];
-        
+        this.landIter = 0;
+        this.v = 2;//bez odbicia
+        this.z = 0.2;//bez odbicia
+        this.koniec = 0;
+        this.siadzNaBelke();
         $('#'+idDystans).text(this.distance);
+    };
+    
+    this.stop = function ()
+    {
+        $('#'+idSkoczek).clearQueue();
+        $('#'+idSkoczek).stop();
+    };
+    
+    this.odNowa = function ()
+    {
+        if (this.land === 1 && this.iter > this.maxIter/3 && this.isRun === 1
+                && this.iter-this.landIter > 3) {
+//            document.location.reload();
+            this.stop();
+            //this.siadzNaBelke();
+            this.reset();
+            console.log('OD NOWA!!!');
+            return true;
+        }
+        return false;
+    };
+    
+    this.siadzNaBelke = function ()
+    {
+        $('#'+idSkoczek).attr('iter','0');
+        p = this.funSkocznia(0);
+        $('#'+idSkoczek).css('top',p[1]);
+        $('#'+idSkoczek).css('left',p[0]);
+        $('#'+idPunktLondowania).css('top',0);
+        $('#'+idPunktLondowania).css('left',0);
+    };
+    
+    this.laduj = function()
+    {
+        if (this.isRun === 1 && this.fly === 1) {
+            console.log('LĄDOWANIE!!!');
+            this.v = this.v - 0.1;
+            this.z = this.z - 0.05;
+            this.correctLand = 1;
+        }
     };
     
     this.odbicie = function()
     {
-        if (this.jump === 1) return;
+        var param1 = 1;
+        var param2 = 0;
         if (this.isRun === 0) return;
+        if (this.jump === 1) return;
+        if (this.land === 1) return;
+        if (this.iter > this.iProg || this.iter<this.iProg/2){
+            console.log('Spóźnione wybicie');
+            param1 = 3;//spóźnione odbicie
+            param2 = 0.5;
+        }
+        
+        console.log('SKACZE!!!'+this.iter);
         this.jump = 1;
         this.jumpMoment = this.iter;
-    };
-    
-    /**
-     * @param {type} x
-     * @param {type} y
-     * @returns {undefined}
-     */
-    this.skacz = function(x,y)
-    {
-        var that = this;
-        y = y-10;
-        $( "#"+idSkoczek ).animate({
-            left: x+"px",
-            top: y+"px"
-        }, {
-            duration: 50,
-            //queue: true
-            step: function(now, fx ) {
-//                console.log('animate');
-//                console.log(now);
-//                console.log(fx);
-                console.log(that.jumpMoment);
-                that.ladowanie ();
-            }
-        });
-        
-        $("#"+idSkoczek).queue(function() {
-            console.log('kolejka');
-            $(this).dequeue();
-        });
+        this.v = 3.5 - (1/param1)*Math.abs(this.iProg - this.iter)-param2;
+        this.z = 0.8;
+        console.log('v='+this.v+'; z='+this.z+';');
     };
 
     /**
@@ -97,7 +133,7 @@ function DsjEngine()
      */
     this.ladowanie = function()
     {
-        if (this.land === 0) return;
+        if (this.isRun === 1 && this.land === 0) return;
         $( "#"+idPunktLondowania ).animate({
             left: this.landPoint[0]+"px",
             top: this.landPoint[1]+"px"
@@ -105,56 +141,110 @@ function DsjEngine()
             duration: 0,
             //queue: true,
         });
+        $( "#"+idPunktLondowania ).effect('pulsate',2000);
     };
 
-    /**
-     * @param {type} x
-     * @param {type} y
-     * @returns {Array}
-     */
-    this.zaczynaj = function(x,y)
+    this.moment = function (x)
     {
+//        console.log(this.fly);
+//        console.log(this);
+//        console.log('moment iter: '+x);
+        
+        if (x < this.maxIter) {
+            this.isRun = 1;
+        } else {
+            this.isRun = 0;
+//            $('#'+idSkoczek).clearQueue();
+//            $('#'+idSkoczek).stop();
+        }
+        
+        if (this.isRun===0) {
+            this.reset();
+//            console.log(this);
+            console.log('Koniec');
+            return true;
+        }
+        
+        this.iter = x;
+        if (x<=this.iProg) {//skocznia, przed progiem
+
+            p = this.funSkocznia(x);
+        } else {//za progiem
+
+            zeskok = this.funZeskok(x);
+            skokOrig = this.funSkok (x, this.v, this.z);
+            skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
+
+            if (this.land===1 || skok[1]>zeskok[1]) {//lądowanie
+                p = zeskok;
+                if (this.land === 0) {//wylądował
+                    this.land = 1;
+                    this.fly = 0;
+                    $('#'+idDystans).text(p[0]);
+                    this.landPoint = [p[0],p[1]];
+                    this.landIter = x;
+                    $('#'+idDystans).effect( "pulsate",'slow');
+                    this.ladowanie();
+                    if (this.correctLand === 1) {
+                        console.log('WYLĄDOWAŁ!!!');
+                    } else {
+                        console.log('GLEBA!!!');
+                        $('#'+idDystans).text("Gleba ;)");
+                    }
+                }
+            } else {//w locie
+
+                this.fly = 1;
+                p = skok;
+            }
+        }
+//        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+        $('#'+idSkoczek).css('top',p[1]-10);
+        $('#'+idSkoczek).css('left',p[0]);
+    };
+
+    this.skok = function (x)
+    {
+        var that = this;
+        $( "#"+idSkoczek ).animate({
+            iter: x
+        }, {
+            duration: 70,
+            //queue: true
+            step: function(now, fx ) {
+                if (fx.end === 0) {
+                    now = 0;
+                }
+//                console.log('NOW');
+//                console.log(now);
+//                console.log('FX');
+//                console.log(fx);
+                that.moment(now);
+            }
+        });
+        
+        $("#"+idSkoczek).queue(function() {
+//            console.log('kolejka');
+            $(this).dequeue();
+        });
+    };
+
+    this.start = function ()
+    {
+        if (this.isRun === 1) {
+            return this;
+        }
+        
+        console.log('START');
+        
         this.reset();
         
-        if (this.isRun === 1) {
-            return;
-        }
-        
-        var v = this.randomFromInterval(3.4,3.5);
-        var z = this.randomFromInterval(0.8,0.9);
         /* Poruszanie się */
-        for (x=0;x<=this.maxIter;x++) {
-            this.iter = x;
-            if (x<=this.iProg) {//skocznia, przed progiem
-                
-                p = this.funSkocznia(x);
-            } else {//za progiem
-                
-                zeskok = this.funZeskok(x);
-                skokOrig = this.funSkok (x, v, z);
-                skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
-                
-                if (this.land===1 || skok[1]>zeskok[1]) {//lądowanie
-                    p = zeskok;
-                    if (this.land === 0) {//wylądował
-                        this.land = 1;
-                        this.fly = 0;
-                        $('#'+idDystans).text(p[0]);
-                        this.landPoint = [p[0],p[1]];
-                        $('#distance').effect( "pulsate",'slow');
-                    }
-                } else {//w locie
-                    
-                    this.fly = 1;
-                    p = skok;
-                }
-            }
-            console.log('skok ['+x+']: '+p[0]+':'+p[1]);
-            this.skacz(p[0],p[1]);
+        var that = this;
+        for (x=0;x<=that.maxIter;x++) {
+            that.skok(x);
         }
-        
-        this.isRun = 0;
-        return [p[0],p[1]];
+        return this;
     };
 
     /**
@@ -175,6 +265,7 @@ function DsjEngine()
      */
     this.funSkok = function(x, v, z)
     {
+//        console.log('v='+v+'; z='+z);
         x = x-this.iProg;
         var alfa = z*Math.PI/2-0.001;
         var g = 9.80665;//grawitaja

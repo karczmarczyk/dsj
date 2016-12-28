@@ -230,7 +230,7 @@ function DsjEngine()
             if (this.duringLand === 1 && this.land === 0) { //w trakcie lądowania
                 this.imgJumperImgNr = 5;
             } else if (this.fly === 1) { //lot
-                this.imgJumperImgNr = 4;
+                this.imgJumperImgNr = 3;//3,4
             } else if (this.fly === 0 && this.jump === 1 && this.land === 0) { //odbicie
                 this.imgJumperImgNr = 2;
             } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie

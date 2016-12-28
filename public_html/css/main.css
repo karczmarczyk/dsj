@@ -8,18 +8,23 @@
 #container {
     width:1300px;
     height: 600px;
-    overflow-y: hidden;//scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
     position: relative;
 }
 
 #skoczek {
-    width: 10px;
-    height: 10px;
-    background-color: red;
+    width: 45px;
+    height: 45px;
+    background-color: transparent;
     position: absolute;
-    top: 0;
-    left: 65px;
+    top: 0px;
+    left: 0px;
+}
+
+#skoczek img {
+    width: 45px;
+    height: 45px;
 }
 
 #punkt-ladowania {

@@ -5,6 +5,10 @@ function DsjEngine()
     var idPunktLondowania = 'punkt-ladowania';
     var idDystans = 'distance';
     var idSkoczek = 'skoczek';
+    var idSkoczekImg = 'skoczek_img';
+    
+    var imgJumperImg = 'images/jumper/jumper_';
+    this.imgJumperImgNr = 1;
     
     /* skala */
     var osX = 20;
@@ -22,6 +26,7 @@ function DsjEngine()
     this.land = 0;
     this.correctLand = 0;
     this.landIter = 0;
+    this.duringLand = 0;
     /* punkt londowania */
     this.landPoint = [0,0];
     /* Czy leci */
@@ -47,6 +52,9 @@ function DsjEngine()
     this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
     
+    /* przesuniecie  */
+    this.przesuniecieY = 45;
+    
     this.reset = function ()
     {
         console.log('RESET');
@@ -56,6 +64,7 @@ function DsjEngine()
         this.fly = 0;
         this.land = 0;
         this.correctLand = 0;
+        this.duringLand = 0;
         this.jump = 0;
         this.jumpMoment = 0;
         this.landPoint = [0,0];
@@ -64,6 +73,7 @@ function DsjEngine()
         this.z = 0.2;//bez odbicia
         this.koniec = 0;
         this.siadzNaBelke();
+        this.imgJumperImgNr = 1;
         $('#'+idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
@@ -105,6 +115,7 @@ function DsjEngine()
             console.log('LĄDOWANIE!!!');
             this.v = this.v - 0.1;
             this.z = this.z - 0.05;
+            this.duringLand = 1;
             this.correctLand = 1;
         }
     };
@@ -116,6 +127,9 @@ function DsjEngine()
         if (this.isRun === 0) return;
         if (this.jump === 1) return;
         if (this.land === 1) return;
+        
+        this.setJumperImg(2);
+        
         if (this.iter > this.iProg || this.iter<this.iProg/2){
             console.log('Spóźnione wybicie');
             param1 = 3;//spóźnione odbicie
@@ -203,9 +217,34 @@ function DsjEngine()
             }
         }
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
-        $('#'+idSkoczek).css('top',p[1]-10);
+        $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
         $('#'+idSkoczek).css('left',p[0]);
+        this.setJumperImg(0);
         this.scrollWindow(p);
+    };
+    
+    this.setJumperImg = function(hard)
+    {
+        console.log('Wybieram obrazek');
+        if (hard === 0) {
+            if (this.duringLand === 1 && this.land === 0) { //w trakcie lądowania
+                this.imgJumperImgNr = 5;
+            } else if (this.fly === 1) { //lot
+                this.imgJumperImgNr = 4;
+            } else if (this.fly === 0 && this.jump === 1 && this.land === 0) { //odbicie
+                this.imgJumperImgNr = 2;
+            } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie
+                this.imgJumperImgNr = 6;
+            } else if (this.land === 1 && this.correctLand === 0) { //wylądował niepoprawnie
+                this.imgJumperImgNr = 7;
+            } else { //zjazd po skoczni
+                this.imgJumperImgNr = 1;
+            }
+        } else {
+            this.imgJumperImgNr = hard;
+        }
+        console.log(imgJumperImg+this.imgJumperImgNr+'.png');
+        $('#'+idSkoczekImg).attr('src',imgJumperImg+this.imgJumperImgNr+'.png');
     };
     
     this.scrollWindow = function (p)

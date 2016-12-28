@@ -9,11 +9,11 @@ function DsjEngine()
     /* skala */
     var osX = 20;
     var osXsign = 1;
-    var osY = 3/4;
+    var osY = 1;
     var osYsign = -1;
     
     /* Max iter */
-    this.maxIter = 80;
+    this.maxIter = 115;
     /* Próg */
     this.iProg = 15;
     /* Dystans */
@@ -42,7 +42,9 @@ function DsjEngine()
     this.ctx.beginPath();
     
     /* rzut ukośny */
+    this.v0 = 5.8; //prędkość nominalna skocznii
     this.v = 0; //prędkość
+    this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
     
     this.reset = function ()
@@ -58,11 +60,13 @@ function DsjEngine()
         this.jumpMoment = 0;
         this.landPoint = [0,0];
         this.landIter = 0;
-        this.v = 2;//bez odbicia
+        this.v = this.v0 - 3;//bez odbicia
         this.z = 0.2;//bez odbicia
         this.koniec = 0;
         this.siadzNaBelke();
         $('#'+idDystans).text(this.distance);
+        $('#container').scrollLeft(0);
+        $('#container').scrollTop(0);
     };
     
     this.stop = function ()
@@ -97,7 +101,7 @@ function DsjEngine()
     
     this.laduj = function()
     {
-        if (this.isRun === 1 && this.fly === 1) {
+        if (this.isRun === 1 && this.fly === 1 && this.iter-this.iProg > 3) {
             console.log('LĄDOWANIE!!!');
             this.v = this.v - 0.1;
             this.z = this.z - 0.05;
@@ -121,8 +125,8 @@ function DsjEngine()
         console.log('SKACZE!!!'+this.iter);
         this.jump = 1;
         this.jumpMoment = this.iter;
-        this.v = 3.5 - (1/param1)*Math.abs(this.iProg - this.iter)-param2;
-        this.z = 0.8;
+        this.v = this.v0 - (1/param1)*Math.abs(this.iProg - this.iter)-param2;
+        this.z = this.z0;
         console.log('v='+this.v+'; z='+this.z+';');
     };
 
@@ -201,6 +205,19 @@ function DsjEngine()
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
         $('#'+idSkoczek).css('top',p[1]-10);
         $('#'+idSkoczek).css('left',p[0]);
+        this.scrollWindow(p);
+    };
+    
+    this.scrollWindow = function (p)
+    {
+        var container = $('#container');
+        var skoczek = $('#'+idSkoczek);
+        container.scrollLeft(
+                p[0]-500
+        );
+        container.scrollTop(
+                p[1]-200
+        );
     };
 
     this.skok = function (x)
@@ -330,7 +347,7 @@ function DsjEngine()
      */
     this.funZeskok = function(x)
     {
-        y = Math.sin(1/15*x + 0.5) * 250 - 410;
+        y = Math.sin(1/25*x + 1) * 250 - 410;
         pX = osXsign*x*osX;
         pY = osYsign*osY*y;
         return [pX,pY,x,y];

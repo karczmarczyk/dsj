@@ -369,7 +369,7 @@ function DsjEngine()
         var container = $('#container');
         var skoczek = $('#'+idSkoczek);
         container.scrollLeft(
-                p[0]-500
+                p[0]-300
         );
         container.scrollTop(
                 p[1]-200

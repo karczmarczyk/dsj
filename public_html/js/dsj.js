@@ -375,7 +375,7 @@ function DsjEngine()
                 p[0]-300
         );
         container.scrollTop(
-                p[1]-200
+                p[1]-150
         );
     };
 

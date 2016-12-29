@@ -16,6 +16,9 @@ function DsjEngine()
     var osY = 1;
     var osYsign = -1;
     
+    /* p */
+    this.p = [0,0];
+    
     /* Max iter */
     this.maxIter = 115;
     /* Próg */
@@ -217,6 +220,7 @@ function DsjEngine()
             }
         }
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+        this.p = p;
         $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
         $('#'+idSkoczek).css('left',p[0]);
         this.setJumperImg(0);
@@ -235,16 +239,37 @@ function DsjEngine()
                 this.imgJumperImgNr = 2;
             } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie
                 this.imgJumperImgNr = 6;
+                this.nachylenie(2);
             } else if (this.land === 1 && this.correctLand === 0) { //wylądował niepoprawnie
                 this.imgJumperImgNr = 7;
+                this.nachylenie(2);
             } else { //zjazd po skoczni
                 this.imgJumperImgNr = 1;
+                this.nachylenie(1);
             }
         } else {
             this.imgJumperImgNr = hard;
         }
         console.log(imgJumperImg+this.imgJumperImgNr+'.png');
         $('#'+idSkoczekImg).attr('src',imgJumperImg+this.imgJumperImgNr+'.png');
+    };
+    
+    this.nachylenie = function (f)
+    {
+        xn = this.iter - 0;
+        xn_1 = this.iter - 1;
+        if (f === 1) { //skocznia
+            yn = fn_xn = this.funSkocznia(xn);
+            yn_1 = fn_xn_1 = this.funSkocznia(xn_1);
+        } else { //zeskok
+            yn = fn_xn = this.funZeskok(xn);
+            yn_1 = fn_xn_1 = this.funZeskok(xn_1);
+        }
+        //console.log('('+yn[3]+' - '+yn_1[3]+') / ('+xn+' - '+xn_1+')');
+        ff = -2* ((yn[3] - yn_1[3]) / (xn - xn_1));
+        //console.log('pochodna ['+ff+'] -> atan(f\') '+Math.atan(ff));
+        $('#'+idSkoczek).css('top',this.p[1]-this.przesuniecieY+ff/4.8);
+        $('#'+idSkoczek).css({'transform' : 'rotate('+ ff +'deg)'});
     };
     
     this.scrollWindow = function (p)

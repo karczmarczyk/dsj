@@ -23,6 +23,8 @@ function DsjEngine()
     this.maxIter = 115;
     /* Próg */
     this.iProg = 15;
+    /* Płaskie */
+    this.iConst = 93;
     /* Dystans */
     this.distance = 0;
     /* Czy wylondował */
@@ -180,7 +182,7 @@ function DsjEngine()
         }
         
         if (this.isRun===0) {
-            this.reset();
+//            this.reset();
 //            console.log(this);
             console.log('Koniec');
             return true;
@@ -192,7 +194,11 @@ function DsjEngine()
             p = this.funSkocznia(x);
         } else {//za progiem
 
-            zeskok = this.funZeskok(x);
+            if (x>=this.iConst) {
+                zeskok = this.funPlaskie(x);
+            } else {
+                zeskok = this.funZeskok(x);
+            }
             skokOrig = this.funSkok (x, this.v, this.z);
             skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
 
@@ -221,8 +227,12 @@ function DsjEngine()
         }
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
         this.p = p;
-        $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
-        $('#'+idSkoczek).css('left',p[0]);
+        if (this.iter < this.maxIter-((this.maxIter-this.iConst)/2)) {
+            $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
+            $('#'+idSkoczek).css('left',p[0]);
+        } else {
+            /* stop */
+        }
         this.setJumperImg(0);
         this.scrollWindow(p);
     };
@@ -262,8 +272,13 @@ function DsjEngine()
             yn = fn_xn = this.funSkocznia(xn);
             yn_1 = fn_xn_1 = this.funSkocznia(xn_1);
         } else { //zeskok
-            yn = fn_xn = this.funZeskok(xn);
-            yn_1 = fn_xn_1 = this.funZeskok(xn_1);
+            if (this.iter > this.iConst) {
+                yn = fn_xn = this.funPlaskie(xn);
+                yn_1 = fn_xn_1 = this.funPlaskie(xn_1);
+            } else {
+                yn = fn_xn = this.funZeskok(xn);
+                yn_1 = fn_xn_1 = this.funZeskok(xn_1);
+            }
         }
         //console.log('('+yn[3]+' - '+yn_1[3]+') / ('+xn+' - '+xn_1+')');
         ff = -2* ((yn[3] - yn_1[3]) / (xn - xn_1));
@@ -429,15 +444,33 @@ function DsjEngine()
         return [pX,pY,x,y];
     };
 
+    this.funPlaskie = function(x)
+    {
+        p = this.funZeskok(this.iConst);
+        pX = osXsign*x*osX;
+        pY = p[1]
+        return [pX,pY,x,p[3]];
+    };
+
+    this.rysujPlaskie = function(startX,startY)
+    {
+        this.ctx.moveTo(startX,startY);
+        for (x=this.iConst;x<=this.maxIter;x++) {
+            p = this.funPlaskie (x);
+            this.ctx.lineTo(p[0],p[1]);
+        }
+        this.ctx.stroke();
+    };
+
     /**
-     * @param {type} startX
-     * @param {type} startY
-     * @returns {Array}
-     */
+        * @param {type} startX
+        * @param {type} startY
+        * @returns {Array}
+        */
     this.rysujZeskok = function(startX,startY)
     {
         this.ctx.moveTo(startX,startY);
-        for (x=this.iProg;x<=this.maxIter;x++) {
+        for (x=this.iProg;x<=this.iConst;x++) {
             p = this.funZeskok (x);
             this.ctx.lineTo(p[0],p[1]);
         }

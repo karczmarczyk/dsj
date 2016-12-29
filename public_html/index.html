@@ -28,6 +28,7 @@
                 var p = [0,0];
                 s = Dsj.rysujSkocznie(p[0],p[1]);
                 p = Dsj.rysujZeskok(s[0],s[1]);
+                Dsj.rysujPlaskie(p[0],p[1]);
                 $('#skocznia').click(function () {
                     if (!Dsj.odNowa()) {
                         Dsj.laduj();

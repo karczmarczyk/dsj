@@ -9,22 +9,29 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
+    <!--<body oncontextmenu="return false">-->
     <body>
-        <div>
+        <div class="panel-top">
             <div id="distance" style="float:left">0</div>
             <!--<button style="float:right" id="reset">Dalej</button>-->
         </div>
+        <div id="wind-panel">
+            <img id="wind_img" src="images/wind.png" alt="wiatr"/>
+            <div id="wind_power"> <span id="wind-power-value">0.0</span> m/s</div>
+        </div>
         <div style="clear:both"></div>
-        <div id="container">
+        <div id="container" class='noselect'>
             <canvas id="skocznia" width="2300" height="800"></canvas>
             <div id="skoczek">
                 <img id="skoczek_img" src="images/jumper/jumper_1.png" alt="skoczek"/>
             </div>
             <div id="punkt-ladowania"></div>
+            
         </div>
         <script>
             $(document).ready(function(){
                 Dsj = new DsjEngine;
+                Dsj.iniWind();
                 var p = [0,0];
                 s = Dsj.rysujSkocznie(p[0],p[1]);
                 p = Dsj.rysujZeskok(s[0],s[1]);

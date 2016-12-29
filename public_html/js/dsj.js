@@ -6,6 +6,7 @@ function DsjEngine()
     var idDystans = 'distance';
     var idSkoczek = 'skoczek';
     var idSkoczekImg = 'skoczek_img';
+    var idWiatr = 'wind_img';
     
     var imgJumperImg = 'images/jumper/jumper_';
     this.imgJumperImgNr = 1;
@@ -57,6 +58,15 @@ function DsjEngine()
     this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
     
+    /* noszenie */
+    this.aero = 0;
+    
+    /* wiatr */
+    this.windDirection = 0;
+    this.windCurrentDirection = 0;
+    this.windPower = 0;
+    this.windCurrentPower = 0;
+    
     /* przesuniecie  */
     this.przesuniecieY = 45;
     
@@ -79,9 +89,70 @@ function DsjEngine()
         this.koniec = 0;
         this.siadzNaBelke();
         this.imgJumperImgNr = 1;
+        this.aero = 0;
         $('#'+idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
+    };
+    
+    this.iniWind = function ()
+    {
+        this.windDirection = this.randomFromInterval(0,360);
+        this.windPower = 0;
+        
+        var that = this;
+        that.calcWind(0);
+        var duration = 5000;
+        that.calcWind(duration);
+        setInterval(function(){
+            that.calcWind(duration);
+        },duration);
+    };
+    
+    this.calcWind = function (duration)
+    {
+        var that = this;
+        
+        var range = this.randomFromInterval(0,20);
+        var max = this.modulo360(this.windDirection + range);
+        var min = this.modulo360(this.windDirection - range);
+        
+        this.windDirection = this.randomFromInterval(min,max);
+        
+        this.windPower = this.randomFromInterval(0,3);
+                
+        console.log('wind '+this.windDirection + 'sin '+Math.sin(this.windDirection) + ' power '+this.windPower);
+        
+        $( "#"+idWiatr ).animate({
+            windDirection: this.windDirection,
+            windPower: this.windPower
+        }, {
+            duration: duration,
+            easing: 'linear',
+            //queue: true,
+            step: function(now, fx ) {
+                if (fx.prop === 'windDirection') {
+                    that.windCurrentDirection = now;
+                    k = now-90;//przesunięcie fazy na rysunku
+                    $('#'+idWiatr).css({'transform' : 'rotate('+ k +'deg)'});
+                    //console.log(that.windCurrentDirection+ ' ' +Math.sin(that.windCurrentDirection*2*Math.PI/360));
+                }
+                if (fx.prop === 'windPower') {
+                    that.windCurrentPower = now;
+                    $('#wind-power-value').text(now.toFixed(2));
+                }
+            }
+        });
+    };
+    
+    this.modulo360 = function(number)
+    {
+        if (number > 360) {
+            number = number - 360;
+        } else if (number < 0) {
+            number = number + 360;
+        }
+        return number;
     };
     
     this.stop = function ()
@@ -222,6 +293,7 @@ function DsjEngine()
             } else {//w locie
 
                 this.fly = 1;
+                this.aeroCalc();
                 p = skok;
             }
         }
@@ -235,6 +307,11 @@ function DsjEngine()
         }
         this.setJumperImg(0);
         this.scrollWindow(p);
+    };
+    
+    this.aeroCalc = function ()
+    {
+        this.aero = 1 * Math.sin(this.windCurrentDirection*2*Math.PI/360) * this.windCurrentPower;
     };
     
     this.setJumperImg = function(hard)
@@ -364,7 +441,8 @@ function DsjEngine()
 //        console.log('v='+v+'; z='+z);
         x = x-this.iProg;
         var alfa = z*Math.PI/2-0.001;
-        var g = 9.80665;//grawitaja
+        var g = 9.80665 + this.aero;//grawitaja
+        console.log('Grawitacja '+ this.aero +'  ' +g);
         var v0 = v;//3.5;//const
         y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
         pX = osXsign*x*osX;

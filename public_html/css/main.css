@@ -4,7 +4,8 @@
 }
 
 html {
-    background-color: skyblue;
+    /*background-color: skyblue;*/
+    background: black;
 }
 
 html, body {
@@ -14,7 +15,8 @@ html, body {
 #skocznia {
     width:2300px;
     height: 800px;
-    background-color: skyblue;
+    /*background-color: skyblue;*/
+    
     position: relative;
 }
 
@@ -24,6 +26,7 @@ html, body {
     overflow-y: hidden;
     overflow-x: hidden;
     position: relative;
+    background-image: url('../images/bg1.jpg');
 }
 
 #skoczek {
@@ -94,5 +97,5 @@ html, body {
     background: #2b2b2b;
     color: white;
     border-bottom: black 3px solid;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }

@@ -49,8 +49,11 @@ function DsjEngine()
     this.c=document.getElementById(idSkocznia);
     
     /* Rysowanie */
-    this.ctx=this.c.getContext("2d");
-    this.ctx.beginPath();
+    this.ctxSkocznia=this.c.getContext("2d");
+    this.ctxSkocznia.beginPath();
+    
+    this.ctxZeskok=this.c.getContext("2d");
+    this.ctxZeskok.beginPath();
     
     /* rzut ukośny */
     this.v0 = 5.8; //prędkość nominalna skocznii
@@ -532,12 +535,17 @@ function DsjEngine()
 
     this.rysujPlaskie = function(startX,startY)
     {
-        this.ctx.moveTo(startX,startY);
+        this.ctxZeskok.moveTo(startX,startY);
         for (x=this.iConst;x<=this.maxIter;x++) {
             p = this.funPlaskie (x);
-            this.ctx.lineTo(p[0],p[1]);
+            this.ctxZeskok.lineTo(p[0],p[1]);
         }
-        this.ctx.stroke();
+        this.ctxZeskok.stroke();
+        this.ctxZeskok.lineTo(p[0],1000);
+        this.ctxZeskok.lineTo(x,1000);
+        this.ctxZeskok.lineTo(x,p[1]);
+        this.ctxZeskok.fillStyle = "white";
+        this.ctxZeskok.fill();
     };
 
     /**
@@ -547,12 +555,21 @@ function DsjEngine()
         */
     this.rysujZeskok = function(startX,startY)
     {
-        this.ctx.moveTo(startX,startY);
+        this.ctxZeskok.moveTo(startX,startY);
+        this.ctxZeskok.stroke();
+        this.ctxSkocznia.lineWidth = 1;
+        
         for (x=this.iProg;x<=this.iConst;x++) {
             p = this.funZeskok (x);
-            this.ctx.lineTo(p[0],p[1]);
+            this.ctxZeskok.lineTo(p[0],p[1]);
         }
-        this.ctx.stroke();
+        this.ctxZeskok.strokeStyle = '#999';
+        this.ctxZeskok.stroke();
+        this.ctxZeskok.lineTo(p[0],1000);
+        this.ctxZeskok.lineTo(startX,1000);
+        this.ctxZeskok.lineTo(startX,startY);
+        this.ctxZeskok.fillStyle = "white";
+        this.ctxZeskok.fill();
         return [p[0],p[1]];
     };
 
@@ -563,12 +580,19 @@ function DsjEngine()
      */
     this.rysujSkocznie = function(startX,startY)
     {
-        this.ctx.moveTo(startX,startY);
+        this.ctxSkocznia.moveTo(startX,startY);
+        this.ctxSkocznia.lineWidth = 3;
         for (x=0;x<=this.iProg;x++) {
             p = this.funSkocznia (x);
-            this.ctx.lineTo(p[0],p[1]);
+            this.ctxSkocznia.lineTo(p[0],p[1]);
         }
-        this.ctx.stroke();
+        this.ctxSkocznia.stroke();
+        /* dopełnienie kształtu */
+        this.ctxSkocznia.lineTo(p[0],1000);
+        this.ctxSkocznia.lineTo(startX,1000);
+        this.ctxSkocznia.lineTo(startX,startY);
+        this.ctxSkocznia.fillStyle = "brown";
+        this.ctxSkocznia.fill();
         return [p[0],p[1]];
     };
 }

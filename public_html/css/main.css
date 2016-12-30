@@ -43,6 +43,16 @@ html, body {
     height: 45px;
 }
 
+#cien_skoczka {
+    width: 40px;
+    height: 5px;
+    background-color: #eee;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 10px;
+}
+
 #punkt-ladowania {
     width: 5px;
     height: 5px;

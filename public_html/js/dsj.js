@@ -7,6 +7,7 @@ function DsjEngine()
     var idSkoczek = 'skoczek';
     var idSkoczekImg = 'skoczek_img';
     var idWiatr = 'wind_img';
+    var idCien = 'cien_skoczka';
     
     var imgJumperImg = 'images/jumper/jumper_';
     this.imgJumperImgNr = 1;
@@ -263,6 +264,9 @@ function DsjEngine()
         }
         
         this.iter = x;
+        
+        zeskok = [0,0];
+        
         if (x<=this.iProg) {//skocznia, przed progiem
 
             p = this.funSkocznia(x);
@@ -299,17 +303,33 @@ function DsjEngine()
                 this.aeroCalc();
                 p = skok;
             }
+            
         }
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
-        this.p = p;
+        
         if (this.iter < this.maxIter-((this.maxIter-this.iConst)/2)) {
             $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
             $('#'+idSkoczek).css('left',p[0]);
+            this.p = p;
+            this.cien(zeskok);
         } else {
             /* stop */
         }
         this.setJumperImg(0);
         this.scrollWindow(p);
+    };
+    
+    this.cien = function (zeskok)
+    {
+        if (this.fly === 1) {
+            this.nachylenie(2,idCien,0);
+            pY = zeskok[1] + (zeskok[1]-this.p[1]) + 10;
+            $('#'+idCien).css('top',pY);
+            $('#'+idCien).css('left',p[0]);
+            $('#'+idCien).show();
+        } else {
+            $('#'+idCien).hide();
+        }
     };
     
     this.aeroCalc = function ()
@@ -329,13 +349,13 @@ function DsjEngine()
                 this.imgJumperImgNr = 2;
             } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie
                 this.imgJumperImgNr = 6;
-                this.nachylenie(2);
+                this.nachylenie(2,idSkoczek,0);
             } else if (this.land === 1 && this.correctLand === 0) { //wylądował niepoprawnie
                 this.imgJumperImgNr = 7;
-                this.nachylenie(2);
+                this.nachylenie(2,idSkoczek,0);
             } else { //zjazd po skoczni
                 this.imgJumperImgNr = 1;
-                this.nachylenie(1);
+                this.nachylenie(1,idSkoczek,0);
             }
         } else {
             this.imgJumperImgNr = hard;
@@ -344,7 +364,7 @@ function DsjEngine()
         $('#'+idSkoczekImg).attr('src',imgJumperImg+this.imgJumperImgNr+'.png');
     };
     
-    this.nachylenie = function (f)
+    this.nachylenie = function (f,id,przesuniecie)
     {
         xn = this.iter - 0;
         xn_1 = this.iter - 1;
@@ -363,8 +383,8 @@ function DsjEngine()
         //console.log('('+yn[3]+' - '+yn_1[3]+') / ('+xn+' - '+xn_1+')');
         ff = -2* ((yn[3] - yn_1[3]) / (xn - xn_1));
         //console.log('pochodna ['+ff+'] -> atan(f\') '+Math.atan(ff));
-        $('#'+idSkoczek).css('top',this.p[1]-this.przesuniecieY+ff/4.8);
-        $('#'+idSkoczek).css({'transform' : 'rotate('+ ff +'deg)'});
+        $('#'+id).css('top',this.p[1]-this.przesuniecieY+przesuniecie+ff/4.8);
+        $('#'+id).css({'transform' : 'rotate('+ ff +'deg)'});
     };
     
     this.scrollWindow = function (p)

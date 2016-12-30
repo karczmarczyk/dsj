@@ -561,8 +561,8 @@ function DsjEngine()
             this.ctxZeskok.lineTo(p[0],p[1]);
         }
         this.ctxZeskok.stroke();
-        this.ctxZeskok.lineTo(p[0],1000);
-        this.ctxZeskok.lineTo(x,1000);
+        this.ctxZeskok.lineTo(p[0],10000);
+        this.ctxZeskok.lineTo(x,10000);
         this.ctxZeskok.lineTo(x,p[1]);
         this.ctxZeskok.fillStyle = "white";
         this.ctxZeskok.fill();
@@ -585,8 +585,8 @@ function DsjEngine()
         }
         this.ctxZeskok.strokeStyle = '#999';
         this.ctxZeskok.stroke();
-        this.ctxZeskok.lineTo(p[0],1000);
-        this.ctxZeskok.lineTo(startX,1000);
+        this.ctxZeskok.lineTo(p[0],10000);
+        this.ctxZeskok.lineTo(startX,10000);
         this.ctxZeskok.lineTo(startX,startY);
         this.ctxZeskok.fillStyle = "white";
         this.ctxZeskok.fill();
@@ -608,8 +608,8 @@ function DsjEngine()
         }
         this.ctxSkocznia.stroke();
         /* dopełnienie kształtu */
-        this.ctxSkocznia.lineTo(p[0],1000);
-        this.ctxSkocznia.lineTo(startX,1000);
+        this.ctxSkocznia.lineTo(p[0],10000);
+        this.ctxSkocznia.lineTo(startX,10000);
         this.ctxSkocznia.lineTo(startX,startY);
         this.ctxSkocznia.fillStyle = "brown";
         this.ctxSkocznia.fill();

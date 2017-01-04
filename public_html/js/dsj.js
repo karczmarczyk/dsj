@@ -371,8 +371,8 @@ function DsjEngine()
 //        }
         if (window.DeviceMotionEvent != undefined) {
             window.ondevicemotion = function(e) {
-                ax = event.accelerationIncludingGravity.x * 5;
-		ay = event.accelerationIncludingGravity.y * 5;
+                ax = event.accelerationIncludingGravity.x * 20;
+		ay = event.accelerationIncludingGravity.y * 20;
                 that.setMousePosition(ax, ay);
             }
         }

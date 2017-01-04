@@ -346,12 +346,45 @@ function DsjEngine()
         }
     };
     
+    this.detectmob = function() { 
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+        ){
+           return true;
+         }
+        else {
+           return false;
+         }
+       }
+    
     this.listenMousePosition = function ()
     {
         var that = this;
-        $('#'+idContainer).mousemove(function(event) {
-            that.setMousePosition(event.pageX, event.pageY);
-        });
+        
+        function hasTouch() {
+            return (('ontouchstart' in window) ||       // html5 browsers
+                    (navigator.maxTouchPoints > 0) ||   // future IE
+                    (navigator.msMaxTouchPoints > 0));  // current IE10
+        }
+        
+        if (hasTouch()) {
+            if (window.DeviceMotionEvent != undefined) {
+                window.ondevicemotion = function(e) {
+                    ax = event.accelerationIncludingGravity.x * 20;
+                    ay = event.accelerationIncludingGravity.y * 20;
+                    that.setMousePosition(ax, ay);
+                };
+            }    
+        } else {
+            $('#'+idContainer).mousemove(function(event) {
+                that.setMousePosition(event.pageX, event.pageY);
+            });
+        }
         
 //        if (window.DeviceOrientationEvent) {
 //            window.addEventListener("deviceorientation", function () {
@@ -369,13 +402,7 @@ function DsjEngine()
 //                that.setMousePosition(orientation.x * 50, orientation.y * 50);
 //            }, true);
 //        }
-        if (window.DeviceMotionEvent != undefined) {
-            window.ondevicemotion = function(e) {
-                ax = event.accelerationIncludingGravity.x * 20;
-		ay = event.accelerationIncludingGravity.y * 20;
-                that.setMousePosition(ax, ay);
-            }
-        }
+        
     };
             
     this.setMousePosition = function (x,y)

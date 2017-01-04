@@ -353,21 +353,28 @@ function DsjEngine()
             that.setMousePosition(event.pageX, event.pageY);
         });
         
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener("deviceorientation", function () {
-                //tilt([event.beta, event.gamma]);
-                that.setMousePosition(event.beta, event.gamma);
-            }, true);
-        } else if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', function () {
-                //tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
-                that.setMousePosition(event.acceleration.x * 2, event.acceleration.y * 2);
-            }, true);
-        } else {
-            window.addEventListener("MozOrientation", function () {
-                //tilt([orientation.x * 50, orientation.y * 50]);
-                that.setMousePosition(orientation.x * 50, orientation.y * 50);
-            }, true);
+//        if (window.DeviceOrientationEvent) {
+//            window.addEventListener("deviceorientation", function () {
+//                //tilt([event.beta, event.gamma]);
+//                that.setMousePosition(event.beta, event.gamma);
+//            }, true);
+//        } else if (window.DeviceMotionEvent) {
+//            window.addEventListener('devicemotion', function () {
+//                //tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
+//                that.setMousePosition(event.acceleration.x * 2, event.acceleration.y * 2);
+//            }, true);
+//        } else {
+//            window.addEventListener("MozOrientation", function () {
+//                //tilt([orientation.x * 50, orientation.y * 50]);
+//                that.setMousePosition(orientation.x * 50, orientation.y * 50);
+//            }, true);
+//        }
+        if (window.DeviceMotionEvent != undefined) {
+            window.ondevicemotion = function(e) {
+                ax = event.accelerationIncludingGravity.x * 5;
+		ay = event.accelerationIncludingGravity.y * 5;
+                that.setMousePosition(ax * 50, ay * 50);
+            }
         }
     };
             

@@ -373,7 +373,7 @@ function DsjEngine()
             window.ondevicemotion = function(e) {
                 ax = event.accelerationIncludingGravity.x * 5;
 		ay = event.accelerationIncludingGravity.y * 5;
-                that.setMousePosition(ax * 50, ay * 50);
+                that.setMousePosition(ax, ay);
             }
         }
     };

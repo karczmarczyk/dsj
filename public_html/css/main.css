@@ -29,6 +29,7 @@ html, body {
     background-image: url('../images/bg1.jpg');
     background-size: 100% 800px ;
     background-repeat: no-repeat;
+    cursor: crosshair;
 }
 
 #skoczek {

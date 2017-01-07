@@ -298,7 +298,7 @@ function DsjEngine()
                 if (this.land === 0) {//wylądował
                     this.land = 1;
                     this.fly = 0;
-                    $('#'+idDystans).text(p[0]);
+                    $('#'+idDystans).text(p[0].toFixed(2));
                     this.landPoint = [p[0],p[1]];
                     this.landIter = x;
                     $('#'+idDystans).effect( "pulsate",'slow');
@@ -307,7 +307,7 @@ function DsjEngine()
                         //console.log('WYLĄDOWAŁ!!!');
                     } else {
                         //console.log('GLEBA!!!');
-                        $('#'+idDystans).text("Gleba ;)");
+                        $('#'+idDystans).text("Gleba ;) " + p[0].toFixed(2));
                     }
                 }
             } else {//w locie
@@ -432,7 +432,7 @@ function DsjEngine()
         $('#'+idSkoczek).css({'transform' : 'rotate('+ rotate +'deg)'});
         
         //console.log('rad '+rotate+' sin '+Math.sin(rotate*Math.PI/360));
-        this.opor = -0.75 * Math.abs(Math.sin(rotate*Math.PI/360));
+        this.opor = -1.5 * Math.abs(Math.sin(rotate*Math.PI/360));
         //console.log(this.opor);
         //console.log('Y:'+rotate);
         //console.log('Y:'+this.diffMouseY);
@@ -440,7 +440,7 @@ function DsjEngine()
     
     this.aeroCalc = function ()
     {
-        this.aero = 1 * Math.sin(this.windCurrentDirection*2*Math.PI/360) * this.windCurrentPower;
+        this.aero = 1/2 * Math.sin(this.windCurrentDirection*2*Math.PI/360) * this.windCurrentPower;
     };
     
     this.setJumperImg = function(hard)

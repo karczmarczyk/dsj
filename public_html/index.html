@@ -9,8 +9,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <!--<body oncontextmenu="return false">-->
-    <body>
+    <body oncontextmenu="return false">
+    <!--<body>-->
         <div class="panel-top">
             <div id="distance" style="float:left">0</div>
             <!--<button style="float:right" id="reset">Dalej</button>-->
@@ -33,6 +33,7 @@
             $(document).ready(function(){
                 Dsj = new DsjEngine;
                 Dsj.iniWind();
+                Dsj.listenMousePosition();
                 var p = [0,0];
                 s = Dsj.rysujSkocznie(p[0],p[1]);
                 p = Dsj.rysujZeskok(s[0],s[1]);

@@ -1,6 +1,7 @@
 function DsjEngine()
 {
     /* elementy - id */
+    var idContainer = 'container';
     var idSkocznia = 'skocznia';
     var idPunktLondowania = 'punkt-ladowania';
     var idDystans = 'distance';
@@ -61,6 +62,8 @@ function DsjEngine()
     this.v = 0; //prędkość
     this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
+    this.opor = 0;
+    this.silaNachylenia = 0;
     
     /* noszenie */
     this.aero = 0;
@@ -74,9 +77,17 @@ function DsjEngine()
     /* przesuniecie  */
     this.przesuniecieY = 45;
     
+    /* pozycja myszy */
+    this.currentMouseX = 0;
+    this.currentMouseY = 0;
+    this.prevMouseX = 0;
+    this.prevMouseY = 0;
+    this.diffMouseX = 0;
+    this.diffMouseY = 0;
+    
     this.reset = function ()
     {
-        console.log('RESET');
+        //console.log('RESET');
         this.iter = 0;
         this.isRun = 0;
         this.distance = 0;
@@ -94,6 +105,8 @@ function DsjEngine()
         this.siadzNaBelke();
         this.imgJumperImgNr = 1;
         this.aero = 0;
+        this.opor = 0;
+        this.silaNachylenia = 0;
         $('#'+idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
@@ -123,9 +136,9 @@ function DsjEngine()
         
         this.windDirection = this.randomFromInterval(min,max);
         
-        this.windPower = this.randomFromInterval(0,3);
+        this.windPower = this.randomFromInterval(0,2);
                 
-        console.log('wind '+this.windDirection + 'sin '+Math.sin(this.windDirection) + ' power '+this.windPower);
+        //console.log('wind '+this.windDirection + 'sin '+Math.sin(this.windDirection) + ' power '+this.windPower);
         
         $( "#"+idWiatr ).animate({
             windDirection: this.windDirection,
@@ -173,7 +186,7 @@ function DsjEngine()
             this.stop();
             //this.siadzNaBelke();
             this.reset();
-            console.log('OD NOWA!!!');
+            //console.log('OD NOWA!!!');
             return true;
         }
         return false;
@@ -192,7 +205,7 @@ function DsjEngine()
     this.laduj = function()
     {
         if (this.isRun === 1 && this.fly === 1 && this.iter-this.iProg > 3) {
-            console.log('LĄDOWANIE!!!');
+            //console.log('LĄDOWANIE!!!');
             this.v = this.v - 0.1;
             this.z = this.z - 0.05;
             this.duringLand = 1;
@@ -211,17 +224,17 @@ function DsjEngine()
         this.setJumperImg(2);
         
         if (this.iter > this.iProg || this.iter<this.iProg/2){
-            console.log('Spóźnione wybicie');
+            //console.log('Spóźnione wybicie');
             param1 = 3;//spóźnione odbicie
             param2 = 0.5;
         }
         
-        console.log('SKACZE!!!'+this.iter);
+        //console.log('SKACZE!!!'+this.iter);
         this.jump = 1;
         this.jumpMoment = this.iter;
         this.v = this.v0 - (1/param1)*Math.abs(this.iProg - this.iter)-param2;
         this.z = this.z0;
-        console.log('v='+this.v+'; z='+this.z+';');
+        //console.log('v='+this.v+'; z='+this.z+';');
     };
 
     /**
@@ -259,7 +272,7 @@ function DsjEngine()
         if (this.isRun===0) {
 //            this.reset();
 //            console.log(this);
-            console.log('Koniec');
+            //console.log('Koniec');
             return true;
         }
         
@@ -291,9 +304,9 @@ function DsjEngine()
                     $('#'+idDystans).effect( "pulsate",'slow');
                     this.ladowanie();
                     if (this.correctLand === 1) {
-                        console.log('WYLĄDOWAŁ!!!');
+                        //console.log('WYLĄDOWAŁ!!!');
                     } else {
-                        console.log('GLEBA!!!');
+                        //console.log('GLEBA!!!');
                         $('#'+idDystans).text("Gleba ;)");
                     }
                 }
@@ -301,6 +314,7 @@ function DsjEngine()
 
                 this.fly = 1;
                 this.aeroCalc();
+                this.oporWiatru();
                 p = skok;
             }
             
@@ -332,6 +346,98 @@ function DsjEngine()
         }
     };
     
+    this.detectmob = function() { 
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPad/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+        ){
+           return true;
+         }
+        else {
+           return false;
+         }
+       }
+    
+    this.listenMousePosition = function ()
+    {
+        var that = this;
+        
+        function hasTouch() {
+            return (('ontouchstart' in window) ||       // html5 browsers
+                    (navigator.maxTouchPoints > 0) ||   // future IE
+                    (navigator.msMaxTouchPoints > 0));  // current IE10
+        }
+        
+        if (hasTouch()) {
+            if (window.DeviceMotionEvent != undefined) {
+                window.ondevicemotion = function(e) {
+                    ax = event.accelerationIncludingGravity.x * 20;
+                    ay = event.accelerationIncludingGravity.y * 20;
+                    that.setMousePosition(ax, ay);
+                };
+            }    
+        } else {
+            $('#'+idContainer).mousemove(function(event) {
+                that.setMousePosition(event.pageX, event.pageY);
+            });
+        }
+        
+//        if (window.DeviceOrientationEvent) {
+//            window.addEventListener("deviceorientation", function () {
+//                //tilt([event.beta, event.gamma]);
+//                that.setMousePosition(event.beta, event.gamma);
+//            }, true);
+//        } else if (window.DeviceMotionEvent) {
+//            window.addEventListener('devicemotion', function () {
+//                //tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
+//                that.setMousePosition(event.acceleration.x * 2, event.acceleration.y * 2);
+//            }, true);
+//        } else {
+//            window.addEventListener("MozOrientation", function () {
+//                //tilt([orientation.x * 50, orientation.y * 50]);
+//                that.setMousePosition(orientation.x * 50, orientation.y * 50);
+//            }, true);
+//        }
+        
+    };
+            
+    this.setMousePosition = function (x,y)
+    {
+        if (this.currentMouseX===0 && this.currentMouseY===0) {//niwelacja dużego przeskoku w pierwszym razie
+            this.currentMouseX = x;
+            this.currentMouseY = y;
+        }
+        this.prevMouseX = this.currentMouseX;
+        this.prevMouseY = this.currentMouseY;
+        this.currentMouseX = x;
+        this.currentMouseY = y;
+        this.diffMouseX = this.currentMouseX - this.prevMouseX;
+        this.diffMouseY = this.currentMouseY - this.prevMouseY;
+    };
+    
+    this.oporWiatru = function ()
+    {
+        this.silaNachylenia = this.silaNachylenia - 0.3 + this.diffMouseY*0.6;
+        var rotate = this.silaNachylenia + 90;
+        if (rotate<60) {
+            rotate = 60;
+        } else if (rotate > 120) {
+            rotate = 120;
+        }
+        rotate = this.modulo360(rotate-90);
+        $('#'+idSkoczek).css({'transform' : 'rotate('+ rotate +'deg)'});
+        
+        //console.log('rad '+rotate+' sin '+Math.sin(rotate*Math.PI/360));
+        this.opor = -0.75 * Math.abs(Math.sin(rotate*Math.PI/360));
+        //console.log(this.opor);
+        //console.log('Y:'+rotate);
+        //console.log('Y:'+this.diffMouseY);
+    };
+    
     this.aeroCalc = function ()
     {
         this.aero = 1 * Math.sin(this.windCurrentDirection*2*Math.PI/360) * this.windCurrentPower;
@@ -339,7 +445,7 @@ function DsjEngine()
     
     this.setJumperImg = function(hard)
     {
-        console.log('Wybieram obrazek');
+        //console.log('Wybieram obrazek');
         if (hard === 0) {
             if (this.duringLand === 1 && this.land === 0) { //w trakcie lądowania
                 this.imgJumperImgNr = 5;
@@ -360,7 +466,7 @@ function DsjEngine()
         } else {
             this.imgJumperImgNr = hard;
         }
-        console.log(imgJumperImg+this.imgJumperImgNr+'.png');
+        //console.log(imgJumperImg+this.imgJumperImgNr+'.png');
         $('#'+idSkoczekImg).attr('src',imgJumperImg+this.imgJumperImgNr+'.png');
     };
     
@@ -431,7 +537,7 @@ function DsjEngine()
             return this;
         }
         
-        console.log('START');
+        //console.log('START');
         
         this.reset();
         
@@ -465,8 +571,8 @@ function DsjEngine()
         x = x-this.iProg;
         var alfa = z*Math.PI/2-0.001;
         var g = 9.80665 + this.aero;//grawitaja
-        console.log('Grawitacja '+ this.aero +'  ' +g);
-        var v0 = v;//3.5;//const
+        //console.log('Grawitacja '+ this.aero +'  ' +g);
+        var v0 = v + this.opor;//3.5;//const
         y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
         pX = osXsign*x*osX;
         pY = osYsign*osY*y;
@@ -514,7 +620,7 @@ function DsjEngine()
                     p = skok;
                 }
             }
-            console.log('skok ['+x+']: '+p[0]+':'+p[1]);
+            //console.log('skok ['+x+']: '+p[0]+':'+p[1]);
             this.ctx.lineTo(p[0],p[1]);
         }
         this.ctx.stroke();

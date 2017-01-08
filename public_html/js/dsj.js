@@ -62,6 +62,7 @@ function DsjEngine()
     this.v = 0; //prędkość
     this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
+    this.prevOpor = 0;
     this.opor = 0;
     this.silaNachylenia = 0;
     
@@ -106,7 +107,9 @@ function DsjEngine()
         this.imgJumperImgNr = 1;
         this.aero = 0;
         this.opor = 0;
+        this.prevOpor = 0;
         this.silaNachylenia = 0;
+        this.przesuniecieY = 44;
         $('#'+idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
@@ -124,6 +127,10 @@ function DsjEngine()
         setInterval(function(){
             that.calcWind(duration);
         },duration);
+        
+        setInterval(function(){
+            that.oporWiatru();
+        },70);
     };
     
     this.calcWind = function (duration)
@@ -294,6 +301,7 @@ function DsjEngine()
             skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
 
             if (this.land===1 || skok[1]>zeskok[1]) {//lądowanie
+                this.przesuniecieY = 40;
                 p = zeskok;
                 if (this.land === 0) {//wylądował
                     this.land = 1;
@@ -312,9 +320,9 @@ function DsjEngine()
                 }
             } else {//w locie
 
+                this.przesuniecieY = 40;
                 this.fly = 1;
                 this.aeroCalc();
-                this.oporWiatru();
                 p = skok;
             }
             
@@ -421,8 +429,30 @@ function DsjEngine()
     
     this.oporWiatru = function ()
     {
-        this.silaNachylenia = this.silaNachylenia - 0.3 + this.diffMouseY*0.6;
-        var rotate = this.silaNachylenia + 90;
+        console.log(this.fly);
+        if (this.fly === 1) {
+            var that = this;
+
+            this.silaNachylenia = this.silaNachylenia - 1.5 + this.diffMouseY*2.5;
+//            console.log(this.silaNachylenia);
+            that.calcOporWiatru(this.silaNachylenia );
+//            console.log(this.silaNachylenia);
+//
+//            $( "#"+idSkoczek ).animate({
+//                silaNachylenia: that.silaNachylenia
+//            }, {
+//                duration: 70,
+//                //queue: true
+//                step: function(now, fx ) {
+//                    that.calcOporWiatru(now);
+//                }
+//            });
+        }
+    };
+    
+    this.calcOporWiatru = function (silaNachylenia) 
+    {
+        var rotate = silaNachylenia + 90;
         if (rotate<60) {
             rotate = 60;
         } else if (rotate > 120) {
@@ -432,8 +462,14 @@ function DsjEngine()
         $('#'+idSkoczek).css({'transform' : 'rotate('+ rotate +'deg)'});
         
         //console.log('rad '+rotate+' sin '+Math.sin(rotate*Math.PI/360));
-        this.opor = -1.5 * Math.abs(Math.sin(rotate*Math.PI/360));
-        //console.log(this.opor);
+        x = Math.abs(Math.sin(rotate*Math.PI/360));
+        opor = -1.5 * x;
+        if(this.prevOpor===0) {
+           this.prevOpor = opor;
+        }
+        this.opor = opor+this.prevOpor/2 ;
+        this.prevOpor = opor;
+        console.log(this.opor);
         //console.log('Y:'+rotate);
         //console.log('Y:'+this.diffMouseY);
     };

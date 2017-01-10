@@ -9,19 +9,19 @@ function DsjEngine()
     var idSkoczekImg = 'skoczek_img';
     var idWiatr = 'wind_img';
     var idCien = 'cien_skoczka';
-    
+
     var imgJumperImg = 'images/jumper/jumper_';
     this.imgJumperImgNr = 1;
-    
+
     /* skala */
     var osX = 20;
     var osXsign = 1;
     var osY = 1;
     var osYsign = -1;
-    
+
     /* p */
-    this.p = [0,0];
-    
+    this.p = [0, 0];
+
     /* Max iter */
     this.maxIter = 115;
     /* Próg */
@@ -36,7 +36,7 @@ function DsjEngine()
     this.landIter = 0;
     this.duringLand = 0;
     /* punkt londowania */
-    this.landPoint = [0,0];
+    this.landPoint = [0, 0];
     /* Czy leci */
     this.fly = 0;
     /* odbicie */
@@ -46,17 +46,17 @@ function DsjEngine()
     this.iter = 0;
     /* rozpoczęto */
     this.isRun = 0;
-    
+
     /* Kontener skoczni */
-    this.c=document.getElementById(idSkocznia);
-    
+    this.c = document.getElementById(idSkocznia);
+
     /* Rysowanie */
-    this.ctxSkocznia=this.c.getContext("2d");
+    this.ctxSkocznia = this.c.getContext("2d");
     this.ctxSkocznia.beginPath();
-    
-    this.ctxZeskok=this.c.getContext("2d");
+
+    this.ctxZeskok = this.c.getContext("2d");
     this.ctxZeskok.beginPath();
-    
+
     /* rzut ukośny */
     this.v0 = 5.8; //prędkość nominalna skocznii
     this.v = 0; //prędkość
@@ -65,19 +65,19 @@ function DsjEngine()
     this.prevOpor = 0;
     this.opor = 0;
     this.silaNachylenia = 0;
-    
+
     /* noszenie */
     this.aero = 0;
-    
+
     /* wiatr */
     this.windDirection = 0;
     this.windCurrentDirection = 0;
     this.windPower = 0;
     this.windCurrentPower = 0;
-    
+
     /* przesuniecie  */
     this.przesuniecieY = 45;
-    
+
     /* pozycja myszy */
     this.currentMouseX = 0;
     this.currentMouseY = 0;
@@ -85,7 +85,7 @@ function DsjEngine()
     this.prevMouseY = 0;
     this.diffMouseX = 0;
     this.diffMouseY = 0;
-    
+
     this.reset = function ()
     {
         //console.log('RESET');
@@ -98,7 +98,7 @@ function DsjEngine()
         this.duringLand = 0;
         this.jump = 0;
         this.jumpMoment = 0;
-        this.landPoint = [0,0];
+        this.landPoint = [0, 0];
         this.landIter = 0;
         this.v = this.v0 - 3;//bez odbicia
         this.z = 0.2;//bez odbicia
@@ -110,55 +110,55 @@ function DsjEngine()
         this.prevOpor = 0;
         this.silaNachylenia = 0;
         this.przesuniecieY = 44;
-        $('#'+idDystans).text(this.distance);
+        $('#' + idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
     };
-    
+
     this.iniWind = function ()
     {
-        this.windDirection = this.randomFromInterval(0,360);
+        this.windDirection = this.randomFromInterval(0, 360);
         this.windPower = 0;
-        
+
         var that = this;
         that.calcWind(0);
         var duration = 5000;
         that.calcWind(duration);
-        setInterval(function(){
+        setInterval(function () {
             that.calcWind(duration);
-        },duration);
-        
-        setInterval(function(){
+        }, duration);
+
+        setInterval(function () {
             that.oporWiatru();
-        },70);
+        }, 70);
     };
-    
+
     this.calcWind = function (duration)
     {
         var that = this;
-        
-        var range = this.randomFromInterval(0,20);
+
+        var range = this.randomFromInterval(0, 20);
         var max = this.modulo360(this.windDirection + range);
         var min = this.modulo360(this.windDirection - range);
-        
-        this.windDirection = this.randomFromInterval(min,max);
-        
-        this.windPower = this.randomFromInterval(0,2);
-                
+
+        this.windDirection = this.randomFromInterval(min, max);
+
+        this.windPower = this.randomFromInterval(0, 2);
+
         //console.log('wind '+this.windDirection + 'sin '+Math.sin(this.windDirection) + ' power '+this.windPower);
-        
-        $( "#"+idWiatr ).animate({
+
+        $("#" + idWiatr).animate({
             windDirection: this.windDirection,
             windPower: this.windPower
         }, {
             duration: duration,
             easing: 'linear',
             //queue: true,
-            step: function(now, fx ) {
+            step: function (now, fx) {
                 if (fx.prop === 'windDirection') {
                     that.windCurrentDirection = now;
-                    k = now-90;//przesunięcie fazy na rysunku
-                    $('#'+idWiatr).css({'transform' : 'rotate('+ k +'deg)'});
+                    k = now - 90;//przesunięcie fazy na rysunku
+                    $('#' + idWiatr).css({'transform': 'rotate(' + k + 'deg)'});
                     //console.log(that.windCurrentDirection+ ' ' +Math.sin(that.windCurrentDirection*2*Math.PI/360));
                 }
                 if (fx.prop === 'windPower') {
@@ -168,8 +168,8 @@ function DsjEngine()
             }
         });
     };
-    
-    this.modulo360 = function(number)
+
+    this.modulo360 = function (number)
     {
         if (number > 360) {
             number = number - 360;
@@ -178,17 +178,17 @@ function DsjEngine()
         }
         return number;
     };
-    
+
     this.stop = function ()
     {
-        $('#'+idSkoczek).clearQueue();
-        $('#'+idSkoczek).stop();
+        $('#' + idSkoczek).clearQueue();
+        $('#' + idSkoczek).stop();
     };
-    
+
     this.odNowa = function ()
     {
-        if (this.land === 1 && this.iter > this.maxIter/3 && this.isRun === 1
-                && this.iter-this.landIter > 3) {
+        if (this.land === 1 && this.iter > this.maxIter / 3 && this.isRun === 1
+                && this.iter - this.landIter > 3) {
 //            document.location.reload();
             this.stop();
             //this.siadzNaBelke();
@@ -198,20 +198,20 @@ function DsjEngine()
         }
         return false;
     };
-    
+
     this.siadzNaBelke = function ()
     {
-        $('#'+idSkoczek).attr('iter','0');
+        $('#' + idSkoczek).attr('iter', '0');
         p = this.funSkocznia(0);
-        $('#'+idSkoczek).css('top',p[1]);
-        $('#'+idSkoczek).css('left',p[0]);
-        $('#'+idPunktLondowania).css('top',0);
-        $('#'+idPunktLondowania).css('left',0);
+        $('#' + idSkoczek).css('top', p[1]);
+        $('#' + idSkoczek).css('left', p[0]);
+        $('#' + idPunktLondowania).css('top', 0);
+        $('#' + idPunktLondowania).css('left', 0);
     };
-    
-    this.laduj = function()
+
+    this.laduj = function ()
     {
-        if (this.isRun === 1 && this.fly === 1 && this.iter-this.iProg > 3) {
+        if (this.isRun === 1 && this.fly === 1 && this.iter - this.iProg > 3) {
             //console.log('LĄDOWANIE!!!');
             this.v = this.v - 0.1;
             this.z = this.z - 0.05;
@@ -219,27 +219,30 @@ function DsjEngine()
             this.correctLand = 1;
         }
     };
-    
-    this.odbicie = function()
+
+    this.odbicie = function ()
     {
         var param1 = 1;
         var param2 = 0;
-        if (this.isRun === 0) return;
-        if (this.jump === 1) return;
-        if (this.land === 1) return;
-        
+        if (this.isRun === 0)
+            return;
+        if (this.jump === 1)
+            return;
+        if (this.land === 1)
+            return;
+
         this.setJumperImg(2);
-        
-        if (this.iter > this.iProg || this.iter<this.iProg/2){
+
+        if (this.iter > this.iProg || this.iter < this.iProg / 2) {
             //console.log('Spóźnione wybicie');
             param1 = 3;//spóźnione odbicie
             param2 = 0.5;
         }
-        
+
         //console.log('SKACZE!!!'+this.iter);
         this.jump = 1;
         this.jumpMoment = this.iter;
-        this.v = this.v0 - (1/param1)*Math.abs(this.iProg - this.iter)-param2;
+        this.v = this.v0 - (1 / param1) * Math.abs(this.iProg - this.iter) - param2;
         this.z = this.z0;
         //console.log('v='+this.v+'; z='+this.z+';');
     };
@@ -249,17 +252,18 @@ function DsjEngine()
      * @param {type} y
      * @returns {undefined}
      */
-    this.ladowanie = function()
+    this.ladowanie = function ()
     {
-        if (this.isRun === 1 && this.land === 0) return;
-        $( "#"+idPunktLondowania ).animate({
-            left: this.landPoint[0]+"px",
-            top: this.landPoint[1]+"px"
+        if (this.isRun === 1 && this.land === 0)
+            return;
+        $("#" + idPunktLondowania).animate({
+            left: this.landPoint[0] + "px",
+            top: this.landPoint[1] + "px"
         }, {
             duration: 0,
             //queue: true,
         });
-        $( "#"+idPunktLondowania ).effect('pulsate',2000);
+        $("#" + idPunktLondowania).effect('pulsate', 2000);
     };
 
     this.moment = function (x)
@@ -267,7 +271,7 @@ function DsjEngine()
 //        console.log(this.fly);
 //        console.log(this);
 //        console.log('moment iter: '+x);
-        
+
         if (x < this.maxIter) {
             this.isRun = 1;
         } else {
@@ -275,47 +279,47 @@ function DsjEngine()
 //            $('#'+idSkoczek).clearQueue();
 //            $('#'+idSkoczek).stop();
         }
-        
-        if (this.isRun===0) {
+
+        if (this.isRun === 0) {
 //            this.reset();
 //            console.log(this);
             //console.log('Koniec');
             return true;
         }
-        
+
         this.iter = x;
-        
-        zeskok = [0,0];
-        
-        if (x<=this.iProg) {//skocznia, przed progiem
+
+        zeskok = [0, 0];
+
+        if (x <= this.iProg) {//skocznia, przed progiem
 
             p = this.funSkocznia(x);
         } else {//za progiem
 
-            if (x>=this.iConst) {
+            if (x >= this.iConst) {
                 zeskok = this.funPlaskie(x);
             } else {
                 zeskok = this.funZeskok(x);
             }
-            skokOrig = this.funSkok (x, this.v, this.z);
-            skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
+            skokOrig = this.funSkok(x, this.v, this.z);
+            skok = this.przesuniecie(skokOrig[0], skokOrig[1]);
 
-            if (this.land===1 || skok[1]>zeskok[1]) {//lądowanie
+            if (this.land === 1 || skok[1] > zeskok[1]) {//lądowanie
                 this.przesuniecieY = 40;
                 p = zeskok;
                 if (this.land === 0) {//wylądował
                     this.land = 1;
                     this.fly = 0;
-                    $('#'+idDystans).text(p[0].toFixed(2));
-                    this.landPoint = [p[0],p[1]];
+                    $('#' + idDystans).text(p[0].toFixed(2));
+                    this.landPoint = [p[0], p[1]];
                     this.landIter = x;
-                    $('#'+idDystans).effect( "pulsate",'slow');
+                    $('#' + idDystans).effect("pulsate", 'slow');
                     this.ladowanie();
                     if (this.correctLand === 1) {
                         //console.log('WYLĄDOWAŁ!!!');
                     } else {
                         //console.log('GLEBA!!!');
-                        $('#'+idDystans).text("Gleba ;) " + p[0].toFixed(2));
+                        $('#' + idDystans).text("Gleba ;) " + p[0].toFixed(2));
                     }
                 }
             } else {//w locie
@@ -325,13 +329,13 @@ function DsjEngine()
                 this.aeroCalc();
                 p = skok;
             }
-            
+
         }
 //        console.log('skok ['+x+']: '+p[0]+':'+p[1]);
-        
-        if (this.iter < this.maxIter-((this.maxIter-this.iConst)/2)) {
-            $('#'+idSkoczek).css('top',p[1]-this.przesuniecieY);
-            $('#'+idSkoczek).css('left',p[0]);
+
+        if (this.iter < this.maxIter - ((this.maxIter - this.iConst) / 2)) {
+            $('#' + idSkoczek).css('top', p[1] - this.przesuniecieY);
+            $('#' + idSkoczek).css('left', p[0]);
             this.p = p;
             this.cien(zeskok);
         } else {
@@ -340,60 +344,65 @@ function DsjEngine()
         this.setJumperImg(0);
         this.scrollWindow(p);
     };
-    
+
     this.cien = function (zeskok)
     {
         if (this.fly === 1) {
-            this.nachylenie(2,idCien,0);
-            pY = zeskok[1] + (zeskok[1]-this.p[1]) + 10;
-            $('#'+idCien).css('top',pY);
-            $('#'+idCien).css('left',p[0]);
-            $('#'+idCien).show();
+            this.nachylenie(2, idCien, 0);
+            pY = zeskok[1] + (zeskok[1] - this.p[1]) + 10;
+            $('#' + idCien).css('top', pY);
+            $('#' + idCien).css('left', p[0]);
+            $('#' + idCien).show();
         } else {
-            $('#'+idCien).hide();
+            $('#' + idCien).hide();
         }
     };
-    
-    this.detectmob = function() { 
-        if( navigator.userAgent.match(/Android/i)
-        || navigator.userAgent.match(/webOS/i)
-        || navigator.userAgent.match(/iPhone/i)
-        || navigator.userAgent.match(/iPad/i)
-        || navigator.userAgent.match(/iPod/i)
-        || navigator.userAgent.match(/BlackBerry/i)
-        || navigator.userAgent.match(/Windows Phone/i)
-        ){
-           return true;
-         }
-        else {
-           return false;
-         }
-       }
-    
+
+    this.detectmob = function () {
+//        if (navigator.userAgent.match(/Android/i)
+//                || navigator.userAgent.match(/webOS/i)
+//                || navigator.userAgent.match(/iPhone/i)
+//                || navigator.userAgent.match(/iPad/i)
+//                || navigator.userAgent.match(/iPod/i)
+//                || navigator.userAgent.match(/BlackBerry/i)
+//                || navigator.userAgent.match(/Windows Phone/i)
+//                ) {
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+        if (typeof window.orientation !== 'undefined') {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     this.listenMousePosition = function ()
     {
         var that = this;
-        
+
         function hasTouch() {
-            return (('ontouchstart' in window) ||       // html5 browsers
-                    (navigator.maxTouchPoints > 0) ||   // future IE
+            return (('ontouchstart' in window) || // html5 browsers
+                    (navigator.maxTouchPoints > 0) || // future IE
                     (navigator.msMaxTouchPoints > 0));  // current IE10
         }
-        
+
         if (hasTouch()) {
             if (window.DeviceMotionEvent != undefined) {
-                window.ondevicemotion = function(e) {
+                window.ondevicemotion = function (e) {
                     ax = event.accelerationIncludingGravity.x * 20;
                     ay = event.accelerationIncludingGravity.y * 20;
                     that.setMousePosition(ax, ay);
                 };
-            }    
+            }
         } else {
-            $('#'+idContainer).mousemove(function(event) {
+            $('#' + idContainer).mousemove(function (event) {
                 that.setMousePosition(event.pageX, event.pageY);
             });
         }
-        
+
 //        if (window.DeviceOrientationEvent) {
 //            window.addEventListener("deviceorientation", function () {
 //                //tilt([event.beta, event.gamma]);
@@ -410,12 +419,12 @@ function DsjEngine()
 //                that.setMousePosition(orientation.x * 50, orientation.y * 50);
 //            }, true);
 //        }
-        
+
     };
-            
-    this.setMousePosition = function (x,y)
+
+    this.setMousePosition = function (x, y)
     {
-        if (this.currentMouseX===0 && this.currentMouseY===0) {//niwelacja dużego przeskoku w pierwszym razie
+        if (this.currentMouseX === 0 && this.currentMouseY === 0) {//niwelacja dużego przeskoku w pierwszym razie
             this.currentMouseX = x;
             this.currentMouseY = y;
         }
@@ -426,16 +435,16 @@ function DsjEngine()
         this.diffMouseX = this.currentMouseX - this.prevMouseX;
         this.diffMouseY = this.currentMouseY - this.prevMouseY;
     };
-    
+
     this.oporWiatru = function ()
     {
         console.log(this.fly);
         if (this.fly === 1) {
             var that = this;
 
-            this.silaNachylenia = this.silaNachylenia - 1.5 + this.diffMouseY*2.5;
+            this.silaNachylenia = this.silaNachylenia - 1.5 + this.diffMouseY * 2.5;
 //            console.log(this.silaNachylenia);
-            that.calcOporWiatru(this.silaNachylenia );
+            that.calcOporWiatru(this.silaNachylenia);
 //            console.log(this.silaNachylenia);
 //
 //            $( "#"+idSkoczek ).animate({
@@ -449,37 +458,37 @@ function DsjEngine()
 //            });
         }
     };
-    
-    this.calcOporWiatru = function (silaNachylenia) 
+
+    this.calcOporWiatru = function (silaNachylenia)
     {
         var rotate = silaNachylenia + 90;
-        if (rotate<60) {
+        if (rotate < 60) {
             rotate = 60;
         } else if (rotate > 120) {
             rotate = 120;
         }
-        rotate = this.modulo360(rotate-90);
-        $('#'+idSkoczek).css({'transform' : 'rotate('+ rotate +'deg)'});
-        
+        rotate = this.modulo360(rotate - 90);
+        $('#' + idSkoczek).css({'transform': 'rotate(' + rotate + 'deg)'});
+
         //console.log('rad '+rotate+' sin '+Math.sin(rotate*Math.PI/360));
-        x = Math.abs(Math.sin(rotate*Math.PI/360));
+        x = Math.abs(Math.sin(rotate * Math.PI / 360));
         opor = -1.5 * x;
-        if(this.prevOpor===0) {
-           this.prevOpor = opor;
+        if (this.prevOpor === 0) {
+            this.prevOpor = opor;
         }
-        this.opor = opor+this.prevOpor/2 ;
+        this.opor = opor + this.prevOpor / 2;
         this.prevOpor = opor;
         console.log(this.opor);
         //console.log('Y:'+rotate);
         //console.log('Y:'+this.diffMouseY);
     };
-    
+
     this.aeroCalc = function ()
     {
-        this.aero = 1/2 * Math.sin(this.windCurrentDirection*2*Math.PI/360) * this.windCurrentPower;
+        this.aero = 1 / 2 * Math.sin(this.windCurrentDirection * 2 * Math.PI / 360) * this.windCurrentPower;
     };
-    
-    this.setJumperImg = function(hard)
+
+    this.setJumperImg = function (hard)
     {
         //console.log('Wybieram obrazek');
         if (hard === 0) {
@@ -491,22 +500,22 @@ function DsjEngine()
                 this.imgJumperImgNr = 2;
             } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie
                 this.imgJumperImgNr = 6;
-                this.nachylenie(2,idSkoczek,0);
+                this.nachylenie(2, idSkoczek, 0);
             } else if (this.land === 1 && this.correctLand === 0) { //wylądował niepoprawnie
                 this.imgJumperImgNr = 7;
-                this.nachylenie(2,idSkoczek,0);
+                this.nachylenie(2, idSkoczek, 0);
             } else { //zjazd po skoczni
                 this.imgJumperImgNr = 1;
-                this.nachylenie(1,idSkoczek,0);
+                this.nachylenie(1, idSkoczek, 0);
             }
         } else {
             this.imgJumperImgNr = hard;
         }
         //console.log(imgJumperImg+this.imgJumperImgNr+'.png');
-        $('#'+idSkoczekImg).attr('src',imgJumperImg+this.imgJumperImgNr+'.png');
+        $('#' + idSkoczekImg).attr('src', imgJumperImg + this.imgJumperImgNr + '.png');
     };
-    
-    this.nachylenie = function (f,id,przesuniecie)
+
+    this.nachylenie = function (f, id, przesuniecie)
     {
         xn = this.iter - 0;
         xn_1 = this.iter - 1;
@@ -523,33 +532,33 @@ function DsjEngine()
             }
         }
         //console.log('('+yn[3]+' - '+yn_1[3]+') / ('+xn+' - '+xn_1+')');
-        ff = -2* ((yn[3] - yn_1[3]) / (xn - xn_1));
+        ff = -2 * ((yn[3] - yn_1[3]) / (xn - xn_1));
         //console.log('pochodna ['+ff+'] -> atan(f\') '+Math.atan(ff));
-        $('#'+id).css('top',this.p[1]-this.przesuniecieY+przesuniecie+ff/4.8);
-        $('#'+id).css({'transform' : 'rotate('+ ff +'deg)'});
+        $('#' + id).css('top', this.p[1] - this.przesuniecieY + przesuniecie + ff / 4.8);
+        $('#' + id).css({'transform': 'rotate(' + ff + 'deg)'});
     };
-    
+
     this.scrollWindow = function (p)
     {
         var container = $('#container');
-        var skoczek = $('#'+idSkoczek);
+        var skoczek = $('#' + idSkoczek);
         container.scrollLeft(
-                p[0]-300
-        );
+                p[0] - 300
+                );
         container.scrollTop(
-                p[1]-150
-        );
+                p[1] - 150
+                );
     };
 
     this.skok = function (x)
     {
         var that = this;
-        $( "#"+idSkoczek ).animate({
+        $("#" + idSkoczek).animate({
             iter: x
         }, {
             duration: 70,
             //queue: true
-            step: function(now, fx ) {
+            step: function (now, fx) {
                 if (fx.end === 0) {
                     now = 0;
                 }
@@ -560,8 +569,8 @@ function DsjEngine()
                 that.moment(now);
             }
         });
-        
-        $("#"+idSkoczek).queue(function() {
+
+        $("#" + idSkoczek).queue(function () {
 //            console.log('kolejka');
             $(this).dequeue();
         });
@@ -572,14 +581,14 @@ function DsjEngine()
         if (this.isRun === 1) {
             return this;
         }
-        
+
         //console.log('START');
-        
+
         this.reset();
-        
+
         /* Poruszanie się */
         var that = this;
-        for (x=0;x<=that.maxIter;x++) {
+        for (x = 0; x <= that.maxIter; x++) {
             that.skok(x);
         }
         return this;
@@ -590,9 +599,9 @@ function DsjEngine()
      * @param {type} max
      * @returns {Number}
      */
-    this.randomFromInterval = function (min,max)
+    this.randomFromInterval = function (min, max)
     {
-        return Math.random()*(max-min+1)+min;
+        return Math.random() * (max - min + 1) + min;
     };
 
     /**
@@ -601,24 +610,24 @@ function DsjEngine()
      * @param {type} z
      * @returns {Array}
      */
-    this.funSkok = function(x, v, z)
+    this.funSkok = function (x, v, z)
     {
 //        console.log('v='+v+'; z='+z);
-        x = x-this.iProg;
-        var alfa = z*Math.PI/2-0.001;
+        x = x - this.iProg;
+        var alfa = z * Math.PI / 2 - 0.001;
         var g = 9.80665 + this.aero;//grawitaja
         //console.log('Grawitacja '+ this.aero +'  ' +g);
         var v0 = v + this.opor;//3.5;//const
-        y = x * Math.tan(alfa) - g / (2 * v0*v0) * x*x;
-        pX = osXsign*x*osX;
-        pY = osYsign*osY*y;
-        return [pX,pY,x,y];
+        y = x * Math.tan(alfa) - g / (2 * v0 * v0) * x * x;
+        pX = osXsign * x * osX;
+        pY = osYsign * osY * y;
+        return [pX, pY, x, y];
     };
 
     /**
      * @returns {Array}
      */
-    this.punktProg = function()
+    this.punktProg = function ()
     {
         return this.funSkocznia(this.iProg);
     };
@@ -628,10 +637,10 @@ function DsjEngine()
      * @param {type} y
      * @returns {Array}
      */
-    this.przesuniecie = function(x,y) 
+    this.przesuniecie = function (x, y)
     {
         prog = this.punktProg();
-        return [x+prog[0],y+prog[1]];
+        return [x + prog[0], y + prog[1]];
     };
 
     /**
@@ -639,100 +648,75 @@ function DsjEngine()
      * @param {type} startY
      * @returns {Array}
      */
-    this.rysujSkok = function(startX,startY) 
+    this.rysujSkok = function (startX, startY)
     {
-        this.ctx.moveTo(0,0);
+        this.ctx.moveTo(0, 0);
         this.ctx.strokeStyle = '#ff0000';
-        for (x=0;x<=this.maxIter;x++) {
-            if (x<=this.iProg) {
+        for (x = 0; x <= this.maxIter; x++) {
+            if (x <= this.iProg) {
                 p = this.funSkocznia(x);
             } else {
                 zeskok = this.funZeskok(x);
-                skokOrig = this.funSkok (x, 3.5, 0.9);
-                skok = this.przesuniecie(skokOrig[0],skokOrig[1]);
-                if (skok[1]>zeskok[1]) {
+                skokOrig = this.funSkok(x, 3.5, 0.9);
+                skok = this.przesuniecie(skokOrig[0], skokOrig[1]);
+                if (skok[1] > zeskok[1]) {
                     p = zeskok;
                 } else {
                     p = skok;
                 }
             }
             //console.log('skok ['+x+']: '+p[0]+':'+p[1]);
-            this.ctx.lineTo(p[0],p[1]);
+            this.ctx.lineTo(p[0], p[1]);
         }
         this.ctx.stroke();
-        return [p[0],p[1]];
+        return [p[0], p[1]];
     };
 
     /**
      * @param {type} x
      * @returns {Array}
      */
-    this.funZeskok = function(x)
+    this.funZeskok = function (x)
     {
-        y = Math.sin(1/25*x + 1) * 250 - 410;
-        pX = osXsign*x*osX;
-        pY = osYsign*osY*y;
-        return [pX,pY,x,y];
+        y = Math.sin(1 / 25 * x + 1) * 250 - 410;
+        pX = osXsign * x * osX;
+        pY = osYsign * osY * y;
+        return [pX, pY, x, y];
     };
 
     /**
      * @param {type} x
      * @returns {Array}
      */
-    this.funSkocznia = function(x) 
+    this.funSkocznia = function (x)
     {
-        y = (1)*x*x - 30*x + 75;
-        pX = osXsign*x*osX;
-        pY = osYsign*osY*y;
-        return [pX,pY,x,y];
+        y = (1) * x * x - 30 * x + 75;
+        pX = osXsign * x * osX;
+        pY = osYsign * osY * y;
+        return [pX, pY, x, y];
     };
 
-    this.funPlaskie = function(x)
+    this.funPlaskie = function (x)
     {
         p = this.funZeskok(this.iConst);
-        pX = osXsign*x*osX;
+        pX = osXsign * x * osX;
         pY = p[1]
-        return [pX,pY,x,p[3]];
+        return [pX, pY, x, p[3]];
     };
 
-    this.rysujPlaskie = function(startX,startY)
+    this.rysujPlaskie = function (startX, startY)
     {
-        this.ctxZeskok.moveTo(startX,startY);
-        for (x=this.iConst;x<=this.maxIter;x++) {
-            p = this.funPlaskie (x);
-            this.ctxZeskok.lineTo(p[0],p[1]);
+        this.ctxZeskok.moveTo(startX, startY);
+        for (x = this.iConst; x <= this.maxIter; x++) {
+            p = this.funPlaskie(x);
+            this.ctxZeskok.lineTo(p[0], p[1]);
         }
         this.ctxZeskok.stroke();
-        this.ctxZeskok.lineTo(p[0],10000);
-        this.ctxZeskok.lineTo(x,10000);
-        this.ctxZeskok.lineTo(x,p[1]);
+        this.ctxZeskok.lineTo(p[0], 10000);
+        this.ctxZeskok.lineTo(x, 10000);
+        this.ctxZeskok.lineTo(x, p[1]);
         this.ctxZeskok.fillStyle = "white";
         this.ctxZeskok.fill();
-    };
-
-    /**
-        * @param {type} startX
-        * @param {type} startY
-        * @returns {Array}
-        */
-    this.rysujZeskok = function(startX,startY)
-    {
-        this.ctxZeskok.moveTo(startX,startY);
-        this.ctxZeskok.stroke();
-        this.ctxSkocznia.lineWidth = 1;
-        
-        for (x=this.iProg;x<=this.iConst;x++) {
-            p = this.funZeskok (x);
-            this.ctxZeskok.lineTo(p[0],p[1]);
-        }
-        this.ctxZeskok.strokeStyle = '#999';
-        this.ctxZeskok.stroke();
-        this.ctxZeskok.lineTo(p[0],10000);
-        this.ctxZeskok.lineTo(startX,10000);
-        this.ctxZeskok.lineTo(startX,startY);
-        this.ctxZeskok.fillStyle = "white";
-        this.ctxZeskok.fill();
-        return [p[0],p[1]];
     };
 
     /**
@@ -740,21 +724,46 @@ function DsjEngine()
      * @param {type} startY
      * @returns {Array}
      */
-    this.rysujSkocznie = function(startX,startY)
+    this.rysujZeskok = function (startX, startY)
     {
-        this.ctxSkocznia.moveTo(startX,startY);
+        this.ctxZeskok.moveTo(startX, startY);
+        this.ctxZeskok.stroke();
+        this.ctxSkocznia.lineWidth = 1;
+
+        for (x = this.iProg; x <= this.iConst; x++) {
+            p = this.funZeskok(x);
+            this.ctxZeskok.lineTo(p[0], p[1]);
+        }
+        this.ctxZeskok.strokeStyle = '#999';
+        this.ctxZeskok.stroke();
+        this.ctxZeskok.lineTo(p[0], 10000);
+        this.ctxZeskok.lineTo(startX, 10000);
+        this.ctxZeskok.lineTo(startX, startY);
+        this.ctxZeskok.fillStyle = "white";
+        this.ctxZeskok.fill();
+        return [p[0], p[1]];
+    };
+
+    /**
+     * @param {type} startX
+     * @param {type} startY
+     * @returns {Array}
+     */
+    this.rysujSkocznie = function (startX, startY)
+    {
+        this.ctxSkocznia.moveTo(startX, startY);
         this.ctxSkocznia.lineWidth = 3;
-        for (x=0;x<=this.iProg;x++) {
-            p = this.funSkocznia (x);
-            this.ctxSkocznia.lineTo(p[0],p[1]);
+        for (x = 0; x <= this.iProg; x++) {
+            p = this.funSkocznia(x);
+            this.ctxSkocznia.lineTo(p[0], p[1]);
         }
         this.ctxSkocznia.stroke();
         /* dopełnienie kształtu */
-        this.ctxSkocznia.lineTo(p[0],10000);
-        this.ctxSkocznia.lineTo(startX,10000);
-        this.ctxSkocznia.lineTo(startX,startY);
+        this.ctxSkocznia.lineTo(p[0], 10000);
+        this.ctxSkocznia.lineTo(startX, 10000);
+        this.ctxSkocznia.lineTo(startX, startY);
         this.ctxSkocznia.fillStyle = "brown";
         this.ctxSkocznia.fill();
-        return [p[0],p[1]];
+        return [p[0], p[1]];
     };
 }

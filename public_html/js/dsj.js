@@ -320,6 +320,12 @@ function DsjEngine()
                     } else {
                         //console.log('GLEBA!!!');
                         $('#' + idDystans).text("Gleba ;) " + p[0].toFixed(2));
+                        $('#crash_img').show();
+                        $('#crash_img').css('top', p[1]-50);
+                        $('#crash_img').css('left',p[0]-20);
+                        setTimeout(function(){
+                            $('#crash_img').hide();
+                        },150);
                     }
                 }
             } else {//w locie
@@ -557,6 +563,7 @@ function DsjEngine()
             iter: x
         }, {
             duration: 70,
+            easing: 'linear',
             //queue: true
             step: function (now, fx) {
                 if (fx.end === 0) {

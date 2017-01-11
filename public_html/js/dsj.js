@@ -390,9 +390,14 @@ function DsjEngine()
         var that = this;
 
         function hasTouch() {
-            return (('ontouchstart' in window) || // html5 browsers
-                    (navigator.maxTouchPoints > 0) || // future IE
-                    (navigator.msMaxTouchPoints > 0));  // current IE10
+//            return (('ontouchstart' in window) || // html5 browsers
+//                    (navigator.maxTouchPoints > 0) || // future IE
+//                    (navigator.msMaxTouchPoints > 0));  // current IE10
+            if (typeof window.orientation !== 'undefined') {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         if (hasTouch()) {

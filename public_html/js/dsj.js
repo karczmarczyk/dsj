@@ -304,7 +304,7 @@ function DsjEngine()
             skokOrig = this.funSkok(x, this.v, this.z);
             skok = this.przesuniecie(skokOrig[0], skokOrig[1]);
 
-            if (this.land === 1 || skok[1] > zeskok[1]) {//lądowanie
+            if (this.land === 1 || skok[1] > zeskok[1]+10) {//lądowanie
                 this.przesuniecieY = 40;
                 p = zeskok;
                 if (this.land === 0) {//wylądował

@@ -449,8 +449,7 @@ function DsjEngine()
 
     this.oporWiatru = function ()
     {
-        console.log(this.fly);
-        if (this.fly === 1) {
+        if (this.fly === 1 && !(this.duringLand === 1 && this.land === 0)) {
             var that = this;
 
             this.silaNachylenia = this.silaNachylenia - 1.5 + this.diffMouseY * 2.5;

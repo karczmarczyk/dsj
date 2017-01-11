@@ -355,7 +355,7 @@ function DsjEngine()
     {
         if (this.fly === 1) {
             this.nachylenie(2, idCien, 0);
-            pY = zeskok[1] + (zeskok[1] - this.p[1]) + 10;
+            pY = zeskok[1] + (zeskok[1] - this.p[1]) + 15;
             $('#' + idCien).css('top', pY);
             $('#' + idCien).css('left', p[0]);
             $('#' + idCien).show();

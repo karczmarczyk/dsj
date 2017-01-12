@@ -356,9 +356,13 @@ function DsjEngine()
         if (this.fly === 1) {
             this.nachylenie(2, idCien, 0);
             pY = zeskok[1] + (zeskok[1] - this.p[1]) + 15;
-            $('#' + idCien).css('top', pY);
-            $('#' + idCien).css('left', p[0]);
-            $('#' + idCien).show();
+            if (pY<this.p[1]+4 || pY<zeskok[1]+4) {
+                $('#' + idCien).hide();
+            } else {
+                $('#' + idCien).css('top', pY);
+                $('#' + idCien).css('left', p[0]);
+                $('#' + idCien).show();
+            }
         } else {
             $('#' + idCien).hide();
         }

@@ -4,11 +4,14 @@ function DsjEngine()
     var idContainer = 'container';
     var idSkocznia = 'skocznia';
     var idPunktLondowania = 'punkt-ladowania';
+    var idPunktLondowaniaRekord = 'punkt-ladowania-rekord';
     var idDystans = 'distance';
     var idSkoczek = 'skoczek';
     var idSkoczekImg = 'skoczek_img';
     var idWiatr = 'wind_img';
     var idCien = 'cien_skoczka';
+
+    this.currentBest = 0;
 
     var imgJumperImg = 'images/jumper/jumper_';
     this.imgJumperImgNr = 1;
@@ -264,6 +267,21 @@ function DsjEngine()
             //queue: true,
         });
         $("#" + idPunktLondowania).effect('pulsate', 2000);
+        
+        if (this.correctLand === 1) {
+            if (this.landPoint[0] > this.currentBest) {
+                this.currentBest = this.landPoint[0];
+                $("#" + idPunktLondowaniaRekord).animate({
+                    left: this.landPoint[0] + "px",
+                    top: this.landPoint[1] + "px"
+                }, {
+                    duration: 0,
+                    //queue: true,
+                });
+                $('.best_distance').text(this.landPoint[0].toFixed(2));
+                $("#" + idPunktLondowaniaRekord).effect('pulsate', 2000);
+            }
+        }
     };
 
     this.moment = function (x)

@@ -66,6 +66,26 @@ html, body {
     /*display: none;*/
 }
 
+#punkt-ladowania-rekord {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.best_distance {
+    font-size: 20px;
+    color: red;
+}
+
+.best_point {
+    position: absolute;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
 #distance {
     font-size: 20px;
 }

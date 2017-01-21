@@ -64,7 +64,7 @@ function DsjEngine()
     /* idealny lot */
     this.idealFly = 0;
     /* tolerancja idealnego lotu */
-    this.toleranceIdealFly = 5;
+    this.toleranceIdealFly = 7;
 
     /* rzut ukośny */
     this.v0 = 6; //prędkość nominalna skocznii

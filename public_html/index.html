@@ -6,6 +6,7 @@
         <script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
         <script src="js/dsj.js"></script>
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/map-time.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -22,6 +23,7 @@
         </div>
         <div style="clear:both"></div>
         <div id="container" class='noselect'>
+            <div id="map-time" class="map-time-g"></div>
             <canvas id="skocznia" width="2300" height="800"></canvas>
             <div id="skoczek">
                 <img id="skoczek_img" src="images/jumper/jumper_1.png" alt="skoczek"/>
@@ -50,6 +52,8 @@
                 $('#reset').click(function(){
                     Dsj.odNowa();
                 });
+                
+                
             });
         </script>
     </body>

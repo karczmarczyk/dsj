@@ -62,7 +62,7 @@ function DsjEngine()
     this.ctxZeskok.beginPath();
 
     /* rzut ukośny */
-    this.v0 = 5.8; //prędkość nominalna skocznii
+    this.v0 = 6; //prędkość nominalna skocznii
     this.v = 0; //prędkość
     this.z0 = 0.3; //kąt nominalny
     this.z = 0; //kąt odbicia
@@ -494,31 +494,38 @@ function DsjEngine()
 
     this.calcOporWiatru = function (silaNachylenia)
     {
+        var poprawa = 0; //brak kary. powyżej 1 kara rośnie
         var rotate = silaNachylenia + 90;
         if (rotate < 60) {
             rotate = 60;
         } else if (rotate > 120) {
             rotate = 120;
+        } else if (Math.abs(90 - rotate) < 5) {
+            poprawa = 1;
+        } else {
+            poprawa = 0;
         }
         rotate = this.modulo360(rotate - 90);
         $('#' + idSkoczek).css({'transform': 'rotate(' + rotate + 'deg)'});
 
         //console.log('rad '+rotate+' sin '+Math.sin(rotate*Math.PI/360));
         x = Math.abs(Math.sin(rotate * Math.PI / 360));
-        opor = -1.5 * x;
-        if (this.prevOpor === 0) {
-            this.prevOpor = opor;
+        
+        console.log('kara: '+x);
+        if (poprawa === 0) {
+            this.v = this.v - (1/2 * x);
         }
-        this.opor = opor + this.prevOpor / 2;
-        this.prevOpor = opor;
-        console.log(this.opor);
-        //console.log('Y:'+rotate);
-        //console.log('Y:'+this.diffMouseY);
+        console.log('v: '+this.v);
+        
+        this.opor = 0; //jeżeli minusowy to leci bliżej
     };
 
     this.aeroCalc = function ()
     {
+        /* wpływ wiatru */
         this.aero = 1 / 2 * Math.sin(this.windCurrentDirection * 2 * Math.PI / 360) * this.windCurrentPower;
+        
+        /* podczas lądowania */
         if (this.duringLand === 1) {
             this.v = this.v - this.speedOfLand; //szybkość lądowania
         }

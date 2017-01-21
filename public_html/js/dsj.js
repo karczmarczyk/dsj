@@ -60,6 +60,11 @@ function DsjEngine()
 
     this.ctxZeskok = this.c.getContext("2d");
     this.ctxZeskok.beginPath();
+    
+    /* idealny lot */
+    this.idealFly = 0;
+    /* tolerancja idealnego lotu */
+    this.toleranceIdealFly = 5;
 
     /* rzut ukośny */
     this.v0 = 6; //prędkość nominalna skocznii
@@ -498,12 +503,18 @@ function DsjEngine()
         var rotate = silaNachylenia + 90;
         if (rotate < 60) {
             rotate = 60;
+            this.idealFly = 0;
+            poprawa = 0;
         } else if (rotate > 120) {
             rotate = 120;
-        } else if (Math.abs(90 - rotate) < 5) {
+            this.idealFly = 0;
+            poprawa = 0;
+        } else if (Math.abs(90 - rotate) < this.toleranceIdealFly) {
+            this.idealFly = 1;
             poprawa = 1;
         } else {
             poprawa = 0;
+            this.idealFly = 0;
         }
         rotate = this.modulo360(rotate - 90);
         $('#' + idSkoczek).css({'transform': 'rotate(' + rotate + 'deg)'});
@@ -538,7 +549,11 @@ function DsjEngine()
             if (this.duringLand === 1 && this.land === 0) { //w trakcie lądowania
                 this.imgJumperImgNr = 5;
             } else if (this.fly === 1) { //lot
-                this.imgJumperImgNr = 3;//3,4
+                if (this.idealFly) {
+                    this.imgJumperImgNr = 4;
+                } else {
+                    this.imgJumperImgNr = 3;//3,4
+                }
             } else if (this.fly === 0 && this.jump === 1 && this.land === 0) { //odbicie
                 this.imgJumperImgNr = 2;
             } else if (this.land === 1 && this.correctLand === 1) { //wylądował poprawnie

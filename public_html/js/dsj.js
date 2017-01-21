@@ -38,6 +38,7 @@ function DsjEngine()
     this.correctLand = 0;
     this.landIter = 0;
     this.duringLand = 0;
+    this.speedOfLand = 0.02;
     /* punkt londowania */
     this.landPoint = [0, 0];
     /* Czy leci */
@@ -216,8 +217,8 @@ function DsjEngine()
     {
         if (this.isRun === 1 && this.fly === 1 && this.iter - this.iProg > 3) {
             //console.log('LĄDOWANIE!!!');
-            this.v = this.v - 0.1;
-            this.z = this.z - 0.05;
+            //this.v = this.v - 0.1;
+            //this.z = this.z - 0.05;
             this.duringLand = 1;
             this.correctLand = 1;
         }
@@ -518,6 +519,9 @@ function DsjEngine()
     this.aeroCalc = function ()
     {
         this.aero = 1 / 2 * Math.sin(this.windCurrentDirection * 2 * Math.PI / 360) * this.windCurrentPower;
+        if (this.duringLand === 1) {
+            this.v = this.v - this.speedOfLand; //szybkość lądowania
+        }
     };
 
     this.setJumperImg = function (hard)

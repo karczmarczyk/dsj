@@ -26,7 +26,7 @@ function DsjEngine()
     this.p = [0, 0];
 
     /* Max iter */
-    this.maxIter = 115;
+    this.maxIter = 500;
     /* Próg */
     this.iProg = 15;
     /* Płaskie */
@@ -323,6 +323,9 @@ function DsjEngine()
         } else {//za progiem
 
             if (x >= this.iConst) {
+                if (x >= this.iConst + 10) {
+                    x = this.iConst + 10;
+                }
                 zeskok = this.funPlaskie(x);
             } else {
                 zeskok = this.funZeskok(x);
@@ -829,4 +832,6 @@ function DsjEngine()
         this.ctxSkocznia.fill();
         return [p[0], p[1]];
     };
+    
+    return this;
 }

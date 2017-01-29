@@ -12,9 +12,17 @@ html, body {
     overflow: hidden;
 }
 
+.panel-top a{
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+}
+
 #skocznia {
-    width:2300px;
-    height: 800px;
+    width:4000px;
+    height: 1500px;
     /*background-color: skyblue;*/
     
     position: relative;

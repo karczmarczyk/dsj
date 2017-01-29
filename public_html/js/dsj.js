@@ -198,7 +198,7 @@ function DsjEngine()
 
     this.odNowa = function ()
     {
-        if (this.land === 1 && this.iter > this.maxIter / 3 && this.isRun === 1
+        if (this.land === 1 && this.isRun === 1
                 && this.iter - this.landIter > 3) {
 //            document.location.reload();
             this.stop();

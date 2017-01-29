@@ -34,7 +34,7 @@ html, body {
     overflow-y: hidden;
     overflow-x: hidden;
     position: relative;
-    background-image: url('../images/bg1.jpg');
+    /*background-image: url('../images/bg1.jpg');*/
     background-size: 100% 800px ;
     background-repeat: no-repeat;
     cursor: crosshair;
@@ -50,8 +50,8 @@ html, body {
 }
 
 #skoczek img {
-    width: 45px;
-    height: 45px;
+    width: 60px;
+    height: 60px;
 }
 
 #cien_skoczka {

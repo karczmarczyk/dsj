@@ -87,7 +87,7 @@ function Hill_0()
     this.windCurrentPower = 0;
 
     /* przesuniecie  */
-    this.przesuniecieY = 45;
+    //this.przesuniecieY = 45;
 
     /* pozycja myszy */
     this.currentMouseX = 0;
@@ -120,7 +120,7 @@ function Hill_0()
         this.opor = 0;
         this.prevOpor = 0;
         this.silaNachylenia = 0;
-        this.przesuniecieY = 44;
+        this.przesuniecieY = 60;
         $('#' + idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);

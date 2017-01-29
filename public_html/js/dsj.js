@@ -87,7 +87,7 @@ function DsjEngine()
     this.windCurrentPower = 0;
 
     /* przesuniecie  */
-    this.przesuniecieY = 45;
+    this.przesuniecieY = 60;
 
     /* pozycja myszy */
     this.currentMouseX = 0;
@@ -120,7 +120,7 @@ function DsjEngine()
         this.opor = 0;
         this.prevOpor = 0;
         this.silaNachylenia = 0;
-        this.przesuniecieY = 44;
+        this.przesuniecieY = 60;
         $('#' + idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
@@ -334,7 +334,7 @@ function DsjEngine()
             skok = this.przesuniecie(skokOrig[0], skokOrig[1]);
 
             if (this.land === 1 || skok[1] > zeskok[1]+10) {//lądowanie
-                this.przesuniecieY = 40;
+                this.przesuniecieY = 55;
                 p = zeskok;
                 if (this.land === 0) {//wylądował
                     this.land = 1;
@@ -359,7 +359,7 @@ function DsjEngine()
                 }
             } else {//w locie
 
-                this.przesuniecieY = 40;
+                this.przesuniecieY = 55;
                 this.fly = 1;
                 this.aeroCalc();
                 p = skok;

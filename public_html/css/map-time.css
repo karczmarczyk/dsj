@@ -1,0 +1,93 @@
+#map-time{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index:1000;
+    pointer-events:none;
+}
+
+div.map-time-g {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1e5799+0,7db9e8+100&0.5+0,0+100 */
+    background: -moz-linear-gradient(top, rgba(30,87,153,0.5) 0%, rgba(125,185,232,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(30,87,153,0.5) 0%,rgba(125,185,232,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(30,87,153,0.5) 0%,rgba(125,185,232,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#801e5799', endColorstr='#007db9e8',GradientType=0 ); /* IE6-9 */
+}
+
+div.map-time-0{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(10,10,50,0);
+}
+div.map-time-1{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(10,10,50,0.1);
+}
+div.map-time-2{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(20,10,50,0.2);
+}
+div.map-time-3{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(30,10,50,0.3);
+}
+div.map-time-4{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(50,10,50,0.4);
+}
+div.map-time-5{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(50,10,50,0.5);
+}
+div.map-time-6{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(40,10,50,0.6);
+}
+div.map-time-7{
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    transition: all 2s ease;
+    background: rgba(20,10,50,0.7);
+}
+div.map-time-8{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(10,10,50,0.8);
+}
+div.map-time-9{
+    -webkit-transition: all 10s ease;
+    -moz-transition: all 10s ease;
+    -o-transition: all 10s ease;
+    transition: all 10s ease;
+    background: rgba(10,10,20,0.9);
+}
+
+div.map-time-ini{
+    -webkit-transition: all 0s ease !important;
+    -moz-transition: all 0s ease !important;
+    -o-transition: all 0s ease !important;
+    transition: all 0s ease !important;
+}

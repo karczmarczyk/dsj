@@ -38,7 +38,7 @@ function DsjEngine()
     this.correctLand = 0;
     this.landIter = 0;
     this.duringLand = 0;
-    this.speedOfLand = 0.02;
+    this.speedOfLand = 0.01;
     /* punkt londowania */
     this.landPoint = [0, 0];
     /* Czy leci */
@@ -64,7 +64,9 @@ function DsjEngine()
     /* idealny lot */
     this.idealFly = 0;
     /* tolerancja idealnego lotu */
-    this.toleranceIdealFly = 7;
+    this.toleranceIdealFly = 10;
+    /* współczynnik kary */
+    this.wspolczynnikKary = 1/2;
 
     /* rzut ukośny */
     this.v0 = 6; //prędkość nominalna skocznii
@@ -524,7 +526,9 @@ function DsjEngine()
         
         console.log('kara: '+x);
         if (poprawa === 0) {
-            this.v = this.v - (1/2 * x);
+            this.v = this.v - (this.wspolczynnikKary * x);
+        } else {
+            this.v = this.v - (this.wspolczynnikKary * 1/2 * x);
         }
         console.log('v: '+this.v);
         

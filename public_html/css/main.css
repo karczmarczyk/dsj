@@ -12,9 +12,17 @@ html, body {
     overflow: hidden;
 }
 
+.panel-top a{
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+}
+
 #skocznia {
-    width:2300px;
-    height: 800px;
+    width:4000px;
+    height: 1500px;
     /*background-color: skyblue;*/
     
     position: relative;
@@ -26,7 +34,7 @@ html, body {
     overflow-y: hidden;
     overflow-x: hidden;
     position: relative;
-    background-image: url('../images/bg1.jpg');
+    /*background-image: url('../images/bg1.jpg');*/
     background-size: 100% 800px ;
     background-repeat: no-repeat;
     cursor: crosshair;
@@ -42,8 +50,8 @@ html, body {
 }
 
 #skoczek img {
-    width: 45px;
-    height: 45px;
+    width: 60px;
+    height: 60px;
 }
 
 #cien_skoczka {
@@ -66,6 +74,26 @@ html, body {
     /*display: none;*/
 }
 
+#punkt-ladowania-rekord {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.best_distance {
+    font-size: 20px;
+    color: red;
+}
+
+.best_point {
+    position: absolute;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
 #distance {
     font-size: 20px;
 }
@@ -74,9 +102,9 @@ html, body {
     position: absolute;
     top: 50px;
     right: 50px;
-    z-index: 100;
     width: 100px;
     height: 100px;
+    z-index:2000;
 /*    overflow: hidden;
     border:#eee;
     background: white;*/
@@ -91,6 +119,14 @@ html, body {
     color: red;
     margin-top: 100px;
     text-align: center
+}
+
+#crash_img {
+    position: absolute;
+    z-index: 1000;
+    top:0px;
+    left: 0px;
+    display: none;
 }
 
 /* ---------------------------------------------------------------------------- */

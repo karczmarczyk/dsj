@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DSJ - ALFA 0.6</title>
+        <script src="js/jquery.js"></script>
+        <script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+        <script src="js/dsj.js"></script>
+        <script src="js/hill_0.js"></script>
+        <script src="js/hill_1.js"></script>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/map-time.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body oncontextmenu="return false">
+    <!--<body>-->
+        <div class="panel-top">
+            <div style="float: right"><a href="/">MENU</a></div>
+            <div id="distance" style="float:left">0</div>
+            <div style="margin-left: 150px" class="best_distance" style="float:left">0</div>
+            <!--<button style="float:right" id="reset">Dalej</button>-->
+        </div>
+        <div id="wind-panel">
+            <img id="wind_img" src="images/wind.png" alt="wiatr"/>
+            <div id="wind_power"> <span id="wind-power-value">0.0</span> m/s</div>
+        </div>
+        <div style="clear:both"></div>
+        <div id="container" class='noselect' style="background-image: url('../images/bg3.jpg');">
+            <div id="map-time" class="map-time"></div>
+            <canvas id="skocznia" width="4000" height="1500"></canvas>
+            <div id="skoczek">
+                <img id="skoczek_img" src="images/jumper/jumper_1.png" alt="skoczek"/>
+            </div>
+            <img id="crash_img" src="images/crash.png" alt="crash"/>
+            <div id="cien_skoczka"></div>
+            <div id="punkt-ladowania"></div>
+            <div id="punkt-ladowania-rekord"><div class="best_point best_distance"></div></div>
+        </div>
+        <script>
+            $(document).ready(function(){
+                Hill_1.prototype = new DsjEngine;
+                Dsj = new Hill_1();
+                Dsj.iniWind();
+                Dsj.listenMousePosition();
+                var p = [0,0];
+                s = Dsj.rysujSkocznie(p[0],p[1]);
+                p = Dsj.rysujZeskok(s[0],s[1]);
+                Dsj.rysujPlaskie(p[0],p[1]);
+                $('#skocznia').click(function () {
+                    if (!Dsj.odNowa()) {
+                        Dsj.laduj();
+                        Dsj.odbicie();
+                        Dsj.start();
+                    }
+                });
+                $('#reset').click(function(){
+                    Dsj.odNowa();
+                });
+                
+                
+            });
+        </script>
+        <div style="display: none" id="cache-container">
+            <img src="images/jumper/jumper_1.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_2.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_3.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_4.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_5.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_6.png" alt="skoczek"/>
+            <img src="images/jumper/jumper_7.png" alt="skoczek"/>
+        </div>
+    </body>
+</html>

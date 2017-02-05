@@ -1,54 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>DSJ - ALFA 0.01</title>
+        <title>DSJ - ALFA 0.6</title>
         <script src="js/jquery.js"></script>
         <script src="js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
         <script src="js/dsj.js"></script>
+        <script src="js/hill_0.js"></script>
+        <script src="js/hill_1.js"></script>
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/map-time.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body oncontextmenu="return false">
-    <!--<body>-->
-        <div class="panel-top">
-            <div id="distance" style="float:left">0</div>
-            <!--<button style="float:right" id="reset">Dalej</button>-->
-        </div>
-        <div id="wind-panel">
-            <img id="wind_img" src="images/wind.png" alt="wiatr"/>
-            <div id="wind_power"> <span id="wind-power-value">0.0</span> m/s</div>
-        </div>
-        <div style="clear:both"></div>
-        <div id="container" class='noselect'>
-            <canvas id="skocznia" width="2300" height="800"></canvas>
-            <div id="skoczek">
-                <img id="skoczek_img" src="images/jumper/jumper_1.png" alt="skoczek"/>
-            </div>
-            <div id="cien_skoczka"></div>
-            <div id="punkt-ladowania"></div>
-            
-        </div>
-        <script>
-            $(document).ready(function(){
-                Dsj = new DsjEngine;
-                Dsj.iniWind();
-                Dsj.listenMousePosition();
-                var p = [0,0];
-                s = Dsj.rysujSkocznie(p[0],p[1]);
-                p = Dsj.rysujZeskok(s[0],s[1]);
-                Dsj.rysujPlaskie(p[0],p[1]);
-                $('#skocznia').click(function () {
-                    if (!Dsj.odNowa()) {
-                        Dsj.laduj();
-                        Dsj.odbicie();
-                        Dsj.start();
-                    }
-                });
-                $('#reset').click(function(){
-                    Dsj.odNowa();
-                });
-            });
-        </script>
+        <h1>Skoki Narciarskie</h1>
+        <ul>
+            <li><a href="/hill_0.html">Skocznia #1</a></li>
+            <li><a href="/hill_1.html">Skocznia #2</a></li>
+        </ul>
     </body>
 </html>

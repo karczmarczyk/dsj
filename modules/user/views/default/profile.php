@@ -3,12 +3,12 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use app\modules\user\Module\helpers\Timezone;
+use app\modules\user\helpers\Timezone;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var app\modules\user\Module\models\Profile $profile
+ * @var app\modules\user\models\Profile $profile
  */
 
 $this->title = Yii::t('user', 'Profile');

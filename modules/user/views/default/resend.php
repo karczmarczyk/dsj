@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var app\modules\user\Module\models\forms\ResendForm $model
+ * @var app\modules\user\models\forms\ResendForm $model
  */
 
 $this->title = Yii::t('user', 'Resend');

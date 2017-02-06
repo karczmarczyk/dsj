@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models\forms;
+namespace app\modules\user\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -18,12 +18,12 @@ class ForgotForm extends Model
     public $email;
 
     /**
-     * @var \app\modules\user\Module\models\User
+     * @var \app\modules\user\models\User
      */
     protected $user = false;
 
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      */
     public $module;
 
@@ -64,7 +64,7 @@ class ForgotForm extends Model
 
     /**
      * Get user based on email
-     * @return \app\modules\user\Module\models\User|null
+     * @return \app\modules\user\models\User|null
      */
     public function getUser()
     {
@@ -94,7 +94,7 @@ class ForgotForm extends Model
     {
         /** @var Mailer $mailer */
         /** @var Message $message */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         if ($this->validate()) {
 

@@ -5,8 +5,8 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var app\modules\user\Module\Module $module
- * @var app\modules\user\Module\models\forms\LoginEmailForm $loginEmailForm
+ * @var app\modules\user\Module $module
+ * @var app\modules\user\models\forms\LoginEmailForm $loginEmailForm
  */
 
 $module = $this->context->module;

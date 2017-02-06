@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -41,7 +41,7 @@ class UserToken extends ActiveRecord
     const TYPE_EMAIL_LOGIN = 4;
 
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      */
     public $module;
 

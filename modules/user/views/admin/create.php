@@ -4,8 +4,8 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var app\modules\user\Module\models\User $user
- * @var app\modules\user\Module\models\Profile $profile
+ * @var app\modules\user\models\User $user
+ * @var app\modules\user\models\Profile $profile
  */
 
 $this->title = Yii::t('user', 'Create {modelClass}', [

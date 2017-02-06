@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
 use yii\web\HttpException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -72,7 +72,7 @@ class User extends ActiveRecord implements IdentityInterface
     protected $permissionCache = [];
 
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      */
     public $module;
 

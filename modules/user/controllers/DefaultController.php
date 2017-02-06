@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 class DefaultController extends Controller
 {
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      * @inheritdoc
      */
     public $module;
@@ -75,7 +75,7 @@ class DefaultController extends Controller
      */
     public function actionLogin()
     {
-        /** @var \app\modules\user\Module\models\forms\LoginForm $model */
+        /** @var \app\modules\user\models\forms\LoginForm $model */
         $model = $this->module->model("LoginForm");
 
         // load post data and login
@@ -93,7 +93,7 @@ class DefaultController extends Controller
      */
     public function actionLoginEmail()
     {
-        /** @var \app\modules\user\Module\models\forms\LoginEmailForm $loginEmailForm */
+        /** @var \app\modules\user\models\forms\LoginEmailForm $loginEmailForm */
         $loginEmailForm = $this->module->model("LoginEmailForm");
 
         // load post data and validate
@@ -113,10 +113,10 @@ class DefaultController extends Controller
      */
     public function actionLoginCallback($token)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
-        /** @var \app\modules\user\Module\models\Role $role */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
+        /** @var \app\modules\user\models\Role $role */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
@@ -196,9 +196,9 @@ class DefaultController extends Controller
      */
     public function actionRegister()
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
-        /** @var \app\modules\user\Module\models\Role $role */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
+        /** @var \app\modules\user\models\Role $role */
 
         // set up new user/profile objects
         $user = $this->module->model("User", ["scenario" => "register"]);
@@ -242,11 +242,11 @@ class DefaultController extends Controller
 
     /**
      * Process data after registration
-     * @param \app\modules\user\Module\models\User $user
+     * @param \app\modules\user\models\User $user
      */
     protected function afterRegister($user)
     {
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\UserToken $userToken */
         $userToken = $this->module->model("UserToken");
 
         // determine userToken type to see if we need to send email
@@ -275,8 +275,8 @@ class DefaultController extends Controller
      */
     public function actionConfirm($token)
     {
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
-        /** @var \app\modules\user\Module\models\User $user */
+        /** @var \app\modules\user\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
 
         // search for userToken
         $success = false;
@@ -307,8 +307,8 @@ class DefaultController extends Controller
      */
     public function actionAccount()
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         // set up user and load post data
         $user = Yii::$app->user->identity;
@@ -352,7 +352,7 @@ class DefaultController extends Controller
      */
     public function actionProfile()
     {
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\Profile $profile */
 
         // set up profile and load post data
         $profile = Yii::$app->user->identity->profile;
@@ -379,7 +379,7 @@ class DefaultController extends Controller
      */
     public function actionResend()
     {
-        /** @var \app\modules\user\Module\models\forms\ResendForm $model */
+        /** @var \app\modules\user\models\forms\ResendForm $model */
 
         // load post data and send email
         $model = $this->module->model("ResendForm");
@@ -397,8 +397,8 @@ class DefaultController extends Controller
      */
     public function actionResendChange()
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         // find userToken of type email change
         $user = Yii::$app->user->identity;
@@ -419,8 +419,8 @@ class DefaultController extends Controller
      */
     public function actionCancel()
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         // find userToken of type email change
         $user = Yii::$app->user->identity;
@@ -439,7 +439,7 @@ class DefaultController extends Controller
      */
     public function actionForgot()
     {
-        /** @var \app\modules\user\Module\models\forms\ForgotForm $model */
+        /** @var \app\modules\user\models\forms\ForgotForm $model */
 
         // load post data and send email
         $model = $this->module->model("ForgotForm");
@@ -457,8 +457,8 @@ class DefaultController extends Controller
      */
     public function actionReset($token)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         // get user token and check expiration
         $userToken = $this->module->model("UserToken");

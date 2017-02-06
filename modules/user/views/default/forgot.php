@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var app\modules\user\Module\models\forms\ForgotForm $model
+ * @var app\modules\user\models\forms\ForgotForm $model
  */
 
 $this->title = Yii::t('user', 'Forgot password');

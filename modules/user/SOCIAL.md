@@ -45,7 +45,7 @@ auth clients**
                 'clientSecret' => 'yyyyyyyyyy',
             ],
             'reddit' => [
-                'class' => 'app\modules\user\Module\components\RedditAuth',
+                'class' => 'app\modules\user\components\RedditAuth',
                 'clientId' => 'xxxxxxxxxx',
                 'clientSecret' => 'yyyyyyyyyy',
                 'scope' => 'identity', // comma separated string, NO SPACES
@@ -113,8 +113,8 @@ Let's take a look at the basic implementation for facebook:
  */
 protected function setInfoFacebook($attributes)
 {
-    /** @var \app\modules\user\Module\models\User    $user */
-    /** @var \app\modules\user\Module\models\Profile $profile */
+    /** @var \app\modules\user\models\User    $user */
+    /** @var \app\modules\user\models\Profile $profile */
     $user = Yii::$app->getModule("user")->model("User");
     $profile = Yii::$app->getModule("user")->model("Profile");
 

@@ -47,7 +47,7 @@ return [
         // 'frontend/config/main.php' and/or 'backend/config/main.php' (OR you can add it
         // to 'common/config' if you remove it from frontend/backend)
         'user' => [
-            'class' => 'app\modules\user\Module\components\User',
+            'class' => 'app\modules\user\components\User',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -60,7 +60,7 @@ return [
     ],
     'modules' => [
         'user' => [
-            'class' => 'app\modules\user\Module\Module',
+            'class' => 'app\modules\user\Module',
             // set custom module properties here ...
         ],
     ],
@@ -210,7 +210,7 @@ To do so, you can use the helper command ```CopyController```.
 // app/config/console.php
 'modules' => [
     'user' => [
-        'class' => 'app\modules\user\Module\Module',
+        'class' => 'app\modules\user\Module',
     ],
 ],
 ```
@@ -228,13 +228,13 @@ php yii user/copy --from=@vendor/amnah/yii2-user --to=@app/modules/user --namesp
 // app/config/web.php + app/config/console.php
 'modules' => [
     'user' => [
-        'class' => 'app\modules\user\Module',
+        'class' => 'app\modules\user',
     ],
 ],
 ```
 
 **Alternatively,** you can do this manually. Just copy/paste the files wherever you'd like and
-change the namespaces in the files. Replace ```app\modules\user\Module``` with ```app\modules\user```.
+change the namespaces in the files. Replace ```app\modules\user``` with ```app\modules\user```.
 
 ## Todo
 * Tests

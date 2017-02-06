@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var app\modules\user\Module\models\User $user
+ * @var app\modules\user\models\User $user
  * @var bool $success
  * @var bool $invalidToken
  */

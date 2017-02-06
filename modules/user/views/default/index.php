@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var app\modules\user\Module\Module $module
+ * @var app\modules\user\Module $module
  * @var array $actions
  */
 

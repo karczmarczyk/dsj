@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models\forms;
+namespace app\modules\user\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -26,12 +26,12 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     /**
-     * @var \app\modules\user\Module\models\User
+     * @var \app\modules\user\models\User
      */
     protected $user = false;
 
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      */
     public $module;
 
@@ -85,7 +85,7 @@ class LoginForm extends Model
 
         // check status and resend email if inactive
         if ($user && $user->status == $user::STATUS_INACTIVE) {
-            /** @var \app\modules\user\Module\models\UserToken $userToken */
+            /** @var \app\modules\user\models\UserToken $userToken */
             $userToken = $this->module->model("UserToken");
             $userToken = $userToken::generate($user->id, $userToken::TYPE_EMAIL_ACTIVATE);
             $user->sendEmailConfirmation($userToken);
@@ -103,7 +103,7 @@ class LoginForm extends Model
             return;
         }
 
-        /** @var \app\modules\user\Module\models\User $user */
+        /** @var \app\modules\user\models\User $user */
 
         // check if password is correct
         $user = $this->getUser();
@@ -114,7 +114,7 @@ class LoginForm extends Model
 
     /**
      * Get user based on email and/or username
-     * @return \app\modules\user\Module\models\User|null
+     * @return \app\modules\user\models\User|null
      */
     public function getUser()
     {

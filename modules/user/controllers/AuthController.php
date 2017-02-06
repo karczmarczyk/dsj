@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -11,7 +11,7 @@ use yii\web\Controller;
 class AuthController extends Controller
 {
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      * @inheritdoc
      */
     public $module;
@@ -87,11 +87,11 @@ class AuthController extends Controller
      * `user_id` yet because that can either be the currently logged in user OR a user
      * matched by email address
      * @param \yii\authclient\BaseClient $client
-     * @return \app\modules\user\Module\models\UserAuth
+     * @return \app\modules\user\models\UserAuth
      */
     protected function initUserAuth($client)
     {
-        /** @var \app\modules\user\Module\models\UserAuth $userAuth */
+        /** @var \app\modules\user\models\UserAuth $userAuth */
 
         // build data. note that we don't set `user_id` yet
         $attributes = $client->getUserAttributes();
@@ -117,9 +117,9 @@ class AuthController extends Controller
      */
     protected function attemptLogin($client)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\UserAuth $userAuth */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\UserAuth $userAuth */
+        /** @var \app\modules\user\models\UserToken $userToken */
         $user = $this->module->model("User");
         $userAuth = $this->module->model("UserAuth");
         $userToken = $this->module->model("UserToken");
@@ -175,13 +175,13 @@ class AuthController extends Controller
     /**
      * Register a new user using client attributes and then associate userAuth
      * @param \yii\authclient\BaseClient $client
-     * @param \app\modules\user\Module\models\UserAuth $userAuth
+     * @param \app\modules\user\models\UserAuth $userAuth
      */
     protected function registerAndLoginUser($client, $userAuth)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
-        /** @var \app\modules\user\Module\models\Role $role */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
+        /** @var \app\modules\user\models\Role $role */
         $role = $this->module->model("Role");
 
         // set user and profile info
@@ -206,7 +206,7 @@ class AuthController extends Controller
     /**
      * Double checks username to ensure that it isn't already taken. If so,
      * revert to fallback
-     * @param \app\modules\user\Module\models\User $user
+     * @param \app\modules\user\models\User $user
      * @param string $fallbackUsername
      * @return mixed
      */
@@ -230,8 +230,8 @@ class AuthController extends Controller
      */
     protected function setInfoFacebook($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
@@ -261,8 +261,8 @@ class AuthController extends Controller
      */
     protected function setInfoTwitter($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
@@ -279,8 +279,8 @@ class AuthController extends Controller
      */
     protected function setInfoGoogle($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
@@ -297,8 +297,8 @@ class AuthController extends Controller
      */
     protected function setInfoReddit($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
@@ -314,8 +314,8 @@ class AuthController extends Controller
      */
     protected function setInfoLinkedIn($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 
@@ -334,8 +334,8 @@ class AuthController extends Controller
      */
     protected function setInfoVkontakte($attributes)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
         $user = $this->module->model("User");
         $profile = $this->module->model("Profile");
 

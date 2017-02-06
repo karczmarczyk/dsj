@@ -1,14 +1,14 @@
 <?php
 
-namespace app\modules\user\Module\models\search;
+namespace app\modules\user\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\user\Module\models\User;
+use app\modules\user\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `app\modules\user\Module\models\User`.
+ * UserSearch represents the model behind the search form about `app\modules\user\models\User`.
  */
 class UserSearch extends User
 {
@@ -56,8 +56,8 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        /** @var \app\modules\user\Module\models\User $user */
-        /** @var \app\modules\user\Module\models\Profile $profile */
+        /** @var \app\modules\user\models\User $user */
+        /** @var \app\modules\user\models\Profile $profile */
 
         // get models
         $user = $this->module->model("User");

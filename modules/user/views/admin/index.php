@@ -6,10 +6,10 @@ use yii\grid\GridView;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var app\modules\user\Module\Module $module
- * @var app\modules\user\Module\models\search\UserSearch $searchModel
- * @var app\modules\user\Module\models\User $user
- * @var app\modules\user\Module\models\Role $role
+ * @var app\modules\user\Module $module
+ * @var app\modules\user\models\search\UserSearch $searchModel
+ * @var app\modules\user\models\User $user
+ * @var app\modules\user\models\Role $role
  */
 
 $module = $this->context->module;

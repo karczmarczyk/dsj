@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -29,7 +29,7 @@ class Role extends ActiveRecord
     const ROLE_USER = 2;
 
     /**
-     * @var \app\modules\user\Module\Module
+     * @var \app\modules\user\Module
      */
     public $module;
 

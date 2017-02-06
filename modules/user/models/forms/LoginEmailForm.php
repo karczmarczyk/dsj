@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user\Module\models\forms;
+namespace app\modules\user\models\forms;
 
 use Yii;
 use yii\swiftmailer\Mailer;
@@ -57,7 +57,7 @@ class LoginEmailForm extends LoginForm
     {
         /** @var Mailer $mailer */
         /** @var Message $message */
-        /** @var \app\modules\user\Module\models\UserToken $userToken */
+        /** @var \app\modules\user\models\UserToken $userToken */
 
         if (!$this->validate()) {
             return false;

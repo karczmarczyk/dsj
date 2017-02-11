@@ -6,6 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => 'main/index',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -20,35 +21,27 @@ $config = [
             'class' => 'app\modules\user\components\User'//'amnah\yii2\user\components\User',
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'main/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+				'class' => 'Swift_SmtpTransport',
+				'host' => 'smtp.gmail.com',
+				'username' => 'mailer.mailowicz@gmail.com',
+				'password' => 'Qwertyu12',
+				'port' => '465',
+				'encryption' => 'ssl',//'tls',
+			],
             'messageConfig' => [
-                'from' => ['admin@karczmarczyk.servehttp.com' => 'Admin'], // this is needed for sending emails
+                'from' => ['admin@karczmarczyk.servehttp.com' => 'SKOKI'], // this is needed for sending emails
                 'charset' => 'UTF-8',
             ]
         ],
-//        'mailer' => [
-//            'class' => 'yii\swiftmailer\Mailer',
-//            'useFileTransport' => false,
-//            'messageConfig' => [
-//                'from' => ['admin@karczmarczyk.servehttp.com' => 'Admin'], // this is needed for sending emails
-//                'charset' => 'UTF-8',
-//            ],
-////			'transport' => [
-////				'class' => 'Swift_SmtpTransport',
-////				'host' => 'smtp.gmail.com',
-////				'username' => 'mateusz.karczmarczyk@gmail.com',
-////				'password' => 'cthuluh1',
-////				'port' => '465',
-////				'encryption' => 'ssl',//'tls',
-////			],
-//        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

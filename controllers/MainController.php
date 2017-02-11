@@ -9,7 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 
-class SiteController extends Controller
+class MainController extends Controller
 {
     /**
      * @inheritdoc
@@ -70,6 +70,7 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->redirect('/'); //akcja niedostępna;
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -90,6 +91,7 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        $this->redirect('/'); //akcja niedostępna;
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -102,6 +104,7 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        $this->redirect('/'); //akcja niedostępna;
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -120,6 +123,7 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        $this->redirect('/'); //akcja niedostępna;
         return $this->render('about');
     }
 }

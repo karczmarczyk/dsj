@@ -62,7 +62,7 @@ class User extends ActiveRecord implements IdentityInterface
     public $newPassword;
 
     /**
-     * @var string New password confirmation - for reset
+     * @var string New password confirmation - for reset and register
      */
     public $newPasswordConfirm;
 
@@ -103,7 +103,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['newPassword'], 'string', 'min' => 3],
             [['newPassword'], 'filter', 'filter' => 'trim'],
             [['newPassword'], 'required', 'on' => ['register', 'reset']],
-            [['newPasswordConfirm'], 'required', 'on' => ['reset']],
+            [['newPasswordConfirm'], 'required', 'on' => ['register', 'reset']],
             [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user', 'Passwords do not match')],
 
             // account page

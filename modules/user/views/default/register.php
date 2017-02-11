@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endif; ?>
 
         <?= $form->field($user, 'newPassword')->passwordInput() ?>
+        <?= $form->field($user, 'newPasswordConfirm')->passwordInput() ?>
 
         <?php /* uncomment if you want to add profile fields here
         <?= $form->field($profile, 'full_name') ?>

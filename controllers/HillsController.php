@@ -59,6 +59,7 @@ class HillsController extends Controller
     
     public function actionHill($id)
     {
+        $this->layout = 'hill';
         $hill = \app\models\Hills::findOne(compact('id'));
         return $this->render('hill', compact('hill'));
     }

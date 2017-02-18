@@ -1,4 +1,4 @@
-function DsjEngine()
+function SkiEngine()
 {
     /* elementy - id */
     var idContainer = 'container';
@@ -13,7 +13,7 @@ function DsjEngine()
 
     this.currentBest = 0;
 
-    var imgJumperImg = 'images/jumper/jumper_';
+    var imgJumperImg = '/images/ski/jumper/jumper_';
     this.imgJumperImgNr = 1;
 
     /* skala */

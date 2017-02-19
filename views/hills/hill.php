@@ -1,11 +1,11 @@
 <?php
 /* Laduję skrypty skoczni */
-use app\assets\ski\SkiHill0Asset;
-SkiHill0Asset::register($this);
+$className = 'app\assets\ski\SkiHill'.$hill->id.'Asset';
+$className::register($this);
 ?>
 
 <div class="panel-top">
-    <div style="float: right"><a href="/">MENU</a></div>
+    <div style="float: right"></div>
     <div id="distance" style="float:left">0</div>
     <div style="margin-left: 150px" class="best_distance" style="float:left">0</div>
     <!--<button style="float:right" id="reset">Dalej</button>-->
@@ -15,7 +15,7 @@ SkiHill0Asset::register($this);
     <div id="wind_power"> <span id="wind-power-value">0.0</span> m/s</div>
 </div>
 <div style="clear:both"></div>
-<div id="container" class='noselect' style="background-image: url('/images/ski/bg1.jpg');">
+<div id="container" class='noselect' style="background-image: url('/images/ski/hill_<?=$hill->id?>/bg.jpg');">
     <div id="map-time" class="map-time"></div>
     <canvas id="skocznia" width="4000" height="1500"></canvas>
     <div id="skoczek">
@@ -28,8 +28,8 @@ SkiHill0Asset::register($this);
 </div>
 <script>
     $(document).ready(function(){
-        Hill_0.prototype = new SkiEngine;
-        Ski = new Hill_0();
+        Hill_<?=$hill->id?>.prototype = new SkiEngine;
+        Ski = new Hill_<?=$hill->id?>();
         Ski.iniWind();
         Ski.listenMousePosition();
         var p = [0,0];

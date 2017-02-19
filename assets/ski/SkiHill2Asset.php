@@ -5,10 +5,10 @@ use yii\web\AssetBundle;
 use yii\web\View;
 use Yii;
 
-class SkiHill0Asset extends AssetBundle
+class SkiHill2Asset extends AssetBundle
 {
     /* http://gromo.github.io/jquery.scrollbar/ */
-    public $sourcePath = '@app/assets/ski/scripts/hill_0/';
+    public $sourcePath = '@app/assets/ski/scripts/hill_2/';
     public $js = [
         'hill.js',
     ];

@@ -1,4 +1,4 @@
-function Hill_0()
+function Hill_2()
 {
     /* elementy - id */
     var idContainer = 'container';
@@ -26,11 +26,11 @@ function Hill_0()
     this.p = [0, 0];
 
     /* Max iter */
-    this.maxIter = 500;
+    this.maxIter = 220;
     /* Próg */
     this.iProg = 15;
     /* Płaskie */
-    this.iConst = 93;
+    this.iConst = 170;
     /* Dystans */
     this.distance = 0;
     /* Czy wylondował */
@@ -66,12 +66,12 @@ function Hill_0()
     /* tolerancja idealnego lotu */
     this.toleranceIdealFly = 10;
     /* współczynnik kary */
-    this.wspolczynnikKary = 1/2;
+    this.wspolczynnikKary = 1/4;
 
     /* rzut ukośny */
-    this.v0 = 6; //prędkość nominalna skocznii
+    this.v0 = 8; //prędkość nominalna skocznii
     this.v = 0; //prędkość
-    this.z0 = 0.3; //kąt nominalny
+    this.z0 = 0.5; //kąt nominalny
     this.z = 0; //kąt odbicia
     this.prevOpor = 0;
     this.opor = 0;
@@ -132,7 +132,7 @@ function Hill_0()
      */
     this.funZeskok = function (x)
     {
-        y = Math.sin(1 / 25 * x + 1) * 250 - 410;
+        y = Math.sin(1 / 50 * x + 1.3) * 550 - 720;
         pX = osXsign * x * osX;
         pY = osYsign * osY * y;
         return [pX, pY, x, y];

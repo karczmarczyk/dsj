@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'mateusz.karczmarczyk@gmail.com',
     'pageSize' => 20,
     'assetsForceCopy' => true
 ];

@@ -59,6 +59,7 @@ class Hills extends \yii\db\ActiveRecord
             $record = new Jumps();
             $record->distance = 0;
             $record->distance_y = 0;
+            $record->user_id = 0;
         }
         
         return $record;

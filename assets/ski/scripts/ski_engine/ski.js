@@ -104,6 +104,8 @@ function SkiEngine()
     this.prevMouseY = 0;
     this.diffMouseX = 0;
     this.diffMouseY = 0;
+    
+    this.myName = '';
 
     this.reset = function ()
     {
@@ -147,6 +149,16 @@ function SkiEngine()
         });
         $('.best_distance').text(x.toFixed(2));
         $("#" + idPunktLondowaniaRekord).effect('pulsate', 2000);
+    };
+    
+    this.ustawRekordziste = function (name)
+    {
+        $('.best_user').text(name);
+    };
+    
+    this.ustawMojeImie = function (name)
+    {
+        this.myName = name;
     };
 
     this.iniWind = function ()
@@ -302,6 +314,7 @@ function SkiEngine()
         if (this.correctLand === 1) {
             if (this.landPoint[0] > this.currentBest) {
                 this.ustawRekord(this.landPoint[0],this.landPoint[1]);
+                this.ustawRekordziste(this.myName);
             }
         }
     };

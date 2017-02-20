@@ -261,9 +261,11 @@ class DefaultController extends Controller
         if ($userTokenType) {
             $userToken = $userToken::generate($user->id, $userTokenType);
             if (!$numSent = $user->sendEmailConfirmation($userToken)) {
-
+                
                 // handle email error
-                //Yii::$app->session->setFlash("Email-error", "Failed to send email");
+                Yii::$app->session->setFlash("Email-error", "Failed to send email");
+            } else {
+                $user->sendEmailInfoAboutRegister();
             }
         } else {
             Yii::$app->user->login($user, $this->module->loginDuration);

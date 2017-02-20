@@ -7,7 +7,8 @@ $className::register($this);
 <div class="panel-top">
     <div style="float: right"></div>
     <div id="distance" style="float:left">0</div>
-    <div style="margin-left: 150px" class="best_distance" style="float:left">0</div>
+    <span style="margin-left: 150px" class="best_distance">0</span>
+    <span style="margin-left:10px; color: red" class="best_user"></span>
     <!--<button style="float:right" id="reset">Dalej</button>-->
 </div>
 <div id="wind-panel">
@@ -37,6 +38,8 @@ $className::register($this);
         p = Ski.rysujZeskok(s[0],s[1]);
         Ski.rysujPlaskie(p[0],p[1]);
         Ski.ustawRekord (<?=$hill->getHillRecord()->distance?>,<?=$hill->getHillRecord()->distance_y?>);
+        Ski.ustawRekordziste('<?=\app\modules\user\models\User::findIdentity($hill->getHillRecord()->user_id)->getDisplayName()?>');
+        Ski.ustawMojeImie('<?=Yii::$app->user->displayName?>');
         $('#skocznia').click(function () {
             if (!Ski.odNowa()) {
                 Ski.laduj();

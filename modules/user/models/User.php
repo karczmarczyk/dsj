@@ -238,7 +238,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne($id);
+        $user = static::findOne($id);
+        if (!is_object($user)) {
+            $user = new User();
+        }
+        return $user;
     }
 
     /**
@@ -470,6 +474,36 @@ class User extends ActiveRecord implements IdentityInterface
         $email = $userToken->data ?: $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user", "Email Confirmation");
         $result = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userToken"))
+            ->setTo($email)
+            ->setSubject($subject)
+            ->send();
+
+        // restore view path and return result
+        $mailer->viewPath = $oldViewPath;
+        return $result;
+    }
+    
+    /**
+     * Send email confirmation to user
+     * @param UserToken $userToken
+     * @return int
+     */
+    public function sendEmailInfoAboutRegister()
+    {
+        /** @var Mailer $mailer */
+        /** @var Message $message */
+
+        // modify view path to module views
+        $mailer = Yii::$app->mailer;
+        $oldViewPath = $mailer->viewPath;
+        $mailer->viewPath = $this->module->emailViewPath;
+
+        // send email
+        $user = $this;
+        $profile = $user->profile;
+        $email = Yii::$app->params['adminEmail'];
+        $subject = Yii::$app->id . " - " . Yii::t("user", "Register Info");
+        $result = $mailer->compose('registerInfo', compact("subject", "user", "profile", "userToken"))
             ->setTo($email)
             ->setSubject($subject)
             ->send();

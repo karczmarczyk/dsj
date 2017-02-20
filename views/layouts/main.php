@@ -19,6 +19,9 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script type="text/javascript">
+        var csrf = '<?=Yii::$app->request->getCsrfToken()?>';
+    </script>
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -40,6 +43,7 @@ AppAsset::register($this);
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Skocznie', 'url' => ['/hills/index']],
 //            ['label' => 'User', 'url' => ['/user']],
+            ['label' => 'Profil', 'url' => ['/user/account'], 'visible' => !Yii::$app->user->isGuest],
             Yii::$app->user->isGuest ?
                 ['label' => 'Login', 'url' => ['/user/login']] : // or ['/user/login-email']
                 ['label' => 'Logout (' . Yii::$app->user->displayName . ')',

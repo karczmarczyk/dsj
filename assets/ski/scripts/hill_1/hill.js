@@ -1,5 +1,8 @@
 function Hill_1()
 {
+    /* ID skoczni */
+    this.id = 1;
+    
     /* elementy - id */
     var idContainer = 'container';
     var idSkocznia = 'skocznia';
@@ -124,6 +127,7 @@ function Hill_1()
         $('#' + idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
+        this.lockAfterLand = 1;
     };
 
     /**

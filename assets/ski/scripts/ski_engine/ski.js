@@ -1,5 +1,13 @@
 function SkiEngine()
 {
+    /* ID skoczni - do nadpisania*/
+    this.id = 0;
+    this.lockAfterLand = 1;
+    this.type = 0; //0 - trening, 1 - konkurs
+    
+    this.zeskokStartX = 0;
+    this.zeskokStartY = 0;
+    
     /* elementy - id */
     var idContainer = 'container';
     var idSkocznia = 'skocznia';
@@ -124,6 +132,21 @@ function SkiEngine()
         $('#' + idDystans).text(this.distance);
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
+        this.lockAfterLand = 1;
+    };
+
+    this.ustawRekord = function (x,y)
+    {
+        this.currentBest = x;
+        $("#" + idPunktLondowaniaRekord).animate({
+            left: x + "px",
+            top: y + "px"
+        }, {
+            duration: 0,
+            //queue: true,
+        });
+        $('.best_distance').text(x.toFixed(2));
+        $("#" + idPunktLondowaniaRekord).effect('pulsate', 2000);
     };
 
     this.iniWind = function ()
@@ -199,7 +222,7 @@ function SkiEngine()
     this.odNowa = function ()
     {
         if (this.land === 1 && this.isRun === 1
-                && this.iter - this.landIter > 3) {
+                && this.iter - this.landIter > 3 && this.lockAfterLand === 0) {
 //            document.location.reload();
             this.stop();
             //this.siadzNaBelke();
@@ -278,18 +301,34 @@ function SkiEngine()
         
         if (this.correctLand === 1) {
             if (this.landPoint[0] > this.currentBest) {
-                this.currentBest = this.landPoint[0];
-                $("#" + idPunktLondowaniaRekord).animate({
-                    left: this.landPoint[0] + "px",
-                    top: this.landPoint[1] + "px"
-                }, {
-                    duration: 0,
-                    //queue: true,
-                });
-                $('.best_distance').text(this.landPoint[0].toFixed(2));
-                $("#" + idPunktLondowaniaRekord).effect('pulsate', 2000);
+                this.ustawRekord(this.landPoint[0],this.landPoint[1]);
             }
         }
+    };
+    
+    this.zapiszOdleglosc = function ()
+    {
+        var that = this;
+        $.ajax({
+            url: "/hills/save",
+            type: 'post',
+            data: {
+                id: that.id,
+                distance: that.landPoint[0],
+                distance_y: that.landPoint[1],
+                iter: that.landIter,
+                correctLand: that.correctLand,
+                type: that.type,
+                _csrf: csrf
+            },
+            success: function (data) {
+                that.lockAfterLand = 0;
+            },
+            error: function () {
+                alert('Nieoczekiwany błąd podczas zapisu skoku.');
+                that.lockAfterLand = 0;
+            }
+        });
     };
 
     this.moment = function (x)
@@ -356,6 +395,8 @@ function SkiEngine()
                             $('#crash_img').hide();
                         },150);
                     }
+                    
+                    this.zapiszOdleglosc();
                 }
             } else {//w locie
 
@@ -792,6 +833,9 @@ function SkiEngine()
      */
     this.rysujZeskok = function (startX, startY)
     {
+        this.zeskokStartX = startX;
+        this.zeskokStartY = startY;
+        
         this.ctxZeskok.moveTo(startX, startY);
         this.ctxZeskok.stroke();
         this.ctxSkocznia.lineWidth = 1;

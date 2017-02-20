@@ -44,4 +44,23 @@ class Hills extends \yii\db\ActiveRecord
             'class' => 'Class',
         ];
     }
+    
+    /**
+     * Zwraca rekord skoczni
+     * @return \app\models\Jumps
+     */
+    public function getHillRecord()
+    {
+        $record = Jumps::find()
+                ->where(['hill_id' => $this->id])
+                ->orderBy(['distance' => SORT_DESC])
+                ->one();
+        if (!is_object($record)) {
+            $record = new Jumps();
+            $record->distance = 0;
+            $record->distance_y = 0;
+        }
+        
+        return $record;
+    }
 }

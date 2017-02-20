@@ -36,6 +36,7 @@ $className::register($this);
         s = Ski.rysujSkocznie(p[0],p[1]);
         p = Ski.rysujZeskok(s[0],s[1]);
         Ski.rysujPlaskie(p[0],p[1]);
+        Ski.ustawRekord (<?=$hill->getHillRecord()->distance?>,<?=$hill->getHillRecord()->distance_y?>);
         $('#skocznia').click(function () {
             if (!Ski.odNowa()) {
                 Ski.laduj();

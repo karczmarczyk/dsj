@@ -52,7 +52,7 @@ class Hills extends \yii\db\ActiveRecord
     public function getHillRecord()
     {
         $record = Jumps::find()
-                ->where(['hill_id' => $this->id])
+                ->where(['hill_id' => $this->id, 'land' => 1])
                 ->orderBy(['distance' => SORT_DESC])
                 ->one();
         if (!is_object($record)) {

@@ -330,7 +330,7 @@ function SkiEngine()
                 iter: that.landIter,
                 correctLand: that.correctLand,
                 type: that.type,
-                _csrf: csrf
+                '_csrf': csrf
             },
             success: function (data) {
                 that.lockAfterLand = 0;

@@ -144,7 +144,7 @@ function SkiEngine()
             left: x + "px",
             top: y + "px"
         }, {
-            duration: 0,
+            duration: 0
             //queue: true,
         });
         $('.best_distance').text(x.toFixed(2));
@@ -294,8 +294,6 @@ function SkiEngine()
     };
 
     /**
-     * @param {type} x
-     * @param {type} y
      * @returns {undefined}
      */
     this.ladowanie = function ()
@@ -306,7 +304,7 @@ function SkiEngine()
             left: this.landPoint[0] + "px",
             top: this.landPoint[1] + "px"
         }, {
-            duration: 0,
+            duration: 0
             //queue: true,
         });
         $("#" + idPunktLondowania).effect('pulsate', 2000);
@@ -820,7 +818,7 @@ function SkiEngine()
     {
         p = this.funZeskok(this.iConst);
         pX = osXsign * x * osX;
-        pY = p[1]
+        pY = p[1];
         return [pX, pY, x, p[3]];
     };
 

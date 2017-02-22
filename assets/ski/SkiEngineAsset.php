@@ -10,7 +10,7 @@ class SkiEngineAsset extends AssetBundle
     /* http://gromo.github.io/jquery.scrollbar/ */
     public $sourcePath = '@app/assets/ski/scripts/ski_engine/';
     public $js = [
-        'ski.js',
+        'ski.packer.js',
     ];
     public $css = [
         'main.css',

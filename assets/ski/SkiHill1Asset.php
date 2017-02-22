@@ -5,7 +5,7 @@ use yii\web\AssetBundle;
 use yii\web\View;
 use Yii;
 
-class SkiHill1Asset extends AssetBundle
+class SkiHill1Asset extends \app\assets\PackerAssetBundle
 {
     /* http://gromo.github.io/jquery.scrollbar/ */
     public $sourcePath = '@app/assets/ski/scripts/hill_1/';

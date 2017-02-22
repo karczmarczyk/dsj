@@ -158,7 +158,7 @@ function Hill_2()
     {
         p = this.funZeskok(this.iConst);
         pX = osXsign * x * osX;
-        pY = p[1]
+        pY = p[1];
         return [pX, pY, x, p[3]];
     };
     

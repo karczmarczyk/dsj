@@ -320,6 +320,13 @@ function SkiEngine()
     this.zapiszOdleglosc = function ()
     {
         var that = this;
+        
+        setTimeout(function(){
+            if (that.lockAfterLand === 1) {
+                PreloaderSave.show();
+            }
+        }, 1000);
+        
         $.ajax({
             url: "/hills/save",
             type: 'post',
@@ -334,6 +341,7 @@ function SkiEngine()
             },
             success: function (data) {
                 that.lockAfterLand = 0;
+                PreloaderSave.hide();
             },
             error: function () {
                 alert('Nieoczekiwany błąd podczas zapisu skoku.');

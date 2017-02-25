@@ -4,11 +4,11 @@ var Preloader = null;
 
 Preloader = {	
 	show : function() {
-		$('#preloader').show();
+		$('#preloader').show('fade');
 	},
 	
 	hide : function() {
-		$('#preloader').hide();
+		$('#preloader').hide(fade);
 		$('#preloader-text').text('Wczytywanie danych. ProszÄ czekaÄ');
 	},
 	

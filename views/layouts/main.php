@@ -7,8 +7,11 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
+use app\assets\PreloaderAsset;
 
 AppAsset::register($this);
+PreloaderAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -80,5 +83,13 @@ AppAsset::register($this);
 
 <?php $this->endBody() ?>
 </body>
+<div id="preloader">
+    <div class="back"></div>
+    <div class="label">
+        <img src="/images/preloader.gif" alt="wczytywanie..." />
+        <!--<span id="preloader-text">Wczytywanie..</span>-->
+    </div>
+</div>
+
 </html>
 <?php $this->endPage() ?>

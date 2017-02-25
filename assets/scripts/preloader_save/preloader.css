@@ -1,0 +1,65 @@
+#preloader-save,
+.dialog-preloader-save {
+    position : absolute;
+    top : 0;
+    left : 0;
+    right : 0;
+    bottom: 0;
+    display : none;
+    cursor: wait;
+}
+
+#preloader-save .back, 
+.dialog-preloader-save .back {
+	top : 0;
+	left : 0;
+	right : 0;
+	bottom: 0;
+	background : white;
+	opacity : 0.5;
+	z-index : 9998;
+    cursor: wait;
+}
+
+#preloader-save .back {
+	position : fixed;
+    cursor: wait;
+}
+
+.dialog-preloader-save .back {
+	position : absolute;
+    cursor: wait;
+}
+
+#preloader-save .label {
+    position : fixed;
+    padding : 8px 10px;
+    background : white;
+    border : 1px solid #cacaca;
+    width : 210px;
+    height : 190px;
+    text-align : center;
+    top : 40%;
+    left : 50%;
+    margin-top : -34px;
+    margin-left : -130px;
+    z-index : 9999;
+    line-height : 48px;
+    font-size : 20px;
+    font-weight: bold;
+    color : #999;
+    cursor: wait;
+}
+
+#preloader-save .label img,
+.dialog-preloader-save .label img {
+    vertical-align: middle;
+    margin-right : 0px;
+    cursor: wait;
+    width: 190px;
+}
+
+#preloader-save-text {
+    margin-top: -20px;
+    color: #cacaca;
+}

@@ -93,6 +93,7 @@ html, body {
     position: absolute;
     top: 0px;
     left: 0px;
+    pointer-events:none;
 }
 
 #skoczek img {
@@ -108,6 +109,7 @@ html, body {
     top: 0px;
     left: 0px;
     border-radius: 10px;
+    pointer-events:none;
 }
 
 #punkt-ladowania {
@@ -151,6 +153,7 @@ html, body {
     width: 100px;
     height: 100px;
     z-index:1000;
+    pointer-events:none;
 /*    overflow: hidden;
     border:#eee;
     background: white;*/
@@ -159,12 +162,14 @@ html, body {
 #wind_img {
     position: fixed;
     width: 100px;
+    pointer-events:none;
 }
 
 #wind_power {
     color: red;
     margin-top: 100px;
-    text-align: center
+    text-align: center;
+    pointer-events:none;
 }
 
 #crash_img {

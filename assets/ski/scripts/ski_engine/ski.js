@@ -323,7 +323,7 @@ function SkiEngine()
         var that = this;
         
         setTimeout(function(){
-            if (that.lockAfterLand === 1) {
+            if (that.lockAfterLand === 1 && that.isRun) {
                 PreloaderSave.show();
             }
         }, 1000);

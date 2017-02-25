@@ -135,6 +135,7 @@ function SkiEngine()
         $('#container').scrollLeft(0);
         $('#container').scrollTop(0);
         this.lockAfterLand = 1;
+        PreloaderSave.hide();
     };
 
     this.ustawRekord = function (x,y)

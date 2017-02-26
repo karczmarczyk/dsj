@@ -1,20 +1,20 @@
 <?php
-namespace app\assets;
+namespace app\assets\ski;
 
 use yii\web\AssetBundle;
 use yii\web\View;
 use Yii;
 
-class PreloaderAsset extends AssetBundle
+class SkiHill3Asset extends \app\assets\PackerAssetBundle
 {
     /* http://gromo.github.io/jquery.scrollbar/ */
-    public $sourcePath = '@app/assets/scripts/preloader/';
+    public $sourcePath = '@app/assets/ski/scripts/hill_3/';
     public $js = [
-        'preloader.js',
+        'hill.js',
     ];
-    public $css = [
-        'preloader.css',
-    ];
+//    public $css = [
+//        'main.css',
+//    ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',

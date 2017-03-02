@@ -64,4 +64,21 @@ class Hills extends \yii\db\ActiveRecord
         
         return $record;
     }
+    
+    public function getHillMyRecord()
+    {
+        $user_id = Yii::$app->user->id;
+        $record = Jumps::find()
+                ->where(['hill_id' => $this->id, 'land' => 1, 'user_id' => $user_id])
+                ->orderBy(['distance' => SORT_DESC])
+                ->one();
+        if (!is_object($record)) {
+            $record = new Jumps();
+            $record->distance = 0;
+            $record->distance_y = 0;
+            $record->user_id = 0;
+        }
+        
+        return $record;
+    }
 }

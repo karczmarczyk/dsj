@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/dsj/views/hills/index.php</file>
-            <file>file:/var/www/dsj/models/Hills.php</file>
+            <file>file:/var/www/dsj/assets/ski/scripts/hill_3/hill.js</file>
+            <file>file:/var/www/dsj/assets/ski/SkiHill3Asset.php</file>
+            <file>file:/var/www/dsj/assets/PackerAssetBundle.php</file>
+            <file>file:/var/www/dsj/views/hills/hill.php</file>
+            <file>file:/var/www/dsj/assets/ski/scripts/ski_engine/main.css</file>
         </group>
     </open-files>
 </project-private>

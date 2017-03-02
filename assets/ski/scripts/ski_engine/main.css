@@ -131,6 +131,20 @@ html, body {
     left: 0px;
 }
 
+#punkt-ladowania-my-rekord {
+    width: 5px;
+    height: 5px;
+    background-color: orange;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.best_mine {
+    font-size: 20px;
+    color: orange;
+}
+
 .best_distance {
     font-size: 20px;
     color: red;

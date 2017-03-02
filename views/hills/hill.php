@@ -7,8 +7,10 @@ $className::register($this);
 <div class="panel-top">
     <div style="float: right"></div>
     <div id="distance" style="float:left">0</div>
-    <span style="margin-left: 150px" class="best_distance">0</span>
+    <span style="margin-left: 50px" class="best_mine">0</span>
+    <span style="margin-left: 50px" class="best_distance">0</span>
     <span style="margin-left:10px; color: red" class="best_user"></span>
+    
     <!--<button style="float:right" id="reset">Dalej</button>-->
 </div>
 <div id="wind-panel">
@@ -26,6 +28,7 @@ $className::register($this);
     <div id="cien_skoczka"></div>
     <div id="punkt-ladowania"></div>
     <div id="punkt-ladowania-rekord"><div class="best_point best_distance"></div></div>
+    <div id="punkt-ladowania-my-rekord"><div class="best_point best_mine"></div></div>
 </div>
 <script>
     $(document).ready(function(){
@@ -40,6 +43,7 @@ $className::register($this);
         Ski.ustawRekord (<?=$hill->getHillRecord()->distance?>,<?=$hill->getHillRecord()->distance_y?>);
         Ski.ustawRekordziste('<?=\app\modules\user\models\User::findIdentity($hill->getHillRecord()->user_id)->getDisplayName()?>');
         Ski.ustawMojeImie('<?=Yii::$app->user->displayName?>');
+        Ski.ustawMojRekord(<?=$hill->getHillMyRecord()->distance?>,<?=$hill->getHillMyRecord()->distance_y?>);
         $('#skocznia').click(function () {
             if (!Ski.odNowa()) {
                 Ski.laduj();

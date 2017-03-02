@@ -13,6 +13,7 @@ function SkiEngine()
     var idSkocznia = 'skocznia';
     var idPunktLondowania = 'punkt-ladowania';
     var idPunktLondowaniaRekord = 'punkt-ladowania-rekord';
+    var idPunktLondowaniaMyRekord = 'punkt-ladowania-my-rekord';
     var idDystans = 'distance';
     var idSkoczek = 'skoczek';
     var idSkoczekImg = 'skoczek_img';
@@ -20,6 +21,7 @@ function SkiEngine()
     var idCien = 'cien_skoczka';
 
     this.currentBest = 0;
+    this.currentMyBest = 0;
 
     var imgJumperImg = '/images/ski/jumper/jumper_';
     this.imgJumperImgNr = 1;
@@ -152,6 +154,20 @@ function SkiEngine()
         $("#" + idPunktLondowaniaRekord).effect('pulsate', 2000);
     };
     
+    this.ustawMojRekord = function (x,y)
+    {
+        this.currentMyBest = x;
+        $("#" + idPunktLondowaniaMyRekord).animate({
+            left: x + "px",
+            top: y + "px"
+        }, {
+            duration: 0
+            //queue: true,
+        });
+        $('.best_mine').text(x.toFixed(2));
+        $("#" + idPunktLondowaniaMyRekord).effect('pulsate', 2000);
+    };
+    
     this.ustawRekordziste = function (name)
     {
         $('.best_user').text(name);
@@ -168,11 +184,11 @@ function SkiEngine()
         this.windPower = 0;
 
         var that = this;
-        that.calcWind(0);
+        calcWind(0, that);
         var duration = 5000;
-        that.calcWind(duration);
+        calcWind(duration, that);
         setInterval(function () {
-            that.calcWind(duration);
+            calcWind(duration, that);
         }, duration);
 
         setInterval(function () {
@@ -180,23 +196,21 @@ function SkiEngine()
         }, 70);
     };
 
-    this.calcWind = function (duration)
+    var calcWind = function (duration, that)//private
     {
-        var that = this;
+        var range = that.randomFromInterval(0, 20);
+        var max = that.modulo360(that.windDirection + range);
+        var min = that.modulo360(that.windDirection - range);
 
-        var range = this.randomFromInterval(0, 20);
-        var max = this.modulo360(this.windDirection + range);
-        var min = this.modulo360(this.windDirection - range);
+        that.windDirection = that.randomFromInterval(min, max);
 
-        this.windDirection = this.randomFromInterval(min, max);
-
-        this.windPower = this.randomFromInterval(0, 2);
+        that.windPower = that.randomFromInterval(0, 2);
 
         //console.log('wind '+this.windDirection + 'sin '+Math.sin(this.windDirection) + ' power '+this.windPower);
 
         $("#" + idWiatr).animate({
-            windDirection: this.windDirection,
-            windPower: this.windPower
+            windDirection: that.windDirection,
+            windPower: that.windPower
         }, {
             duration: duration,
             easing: 'linear',
@@ -314,6 +328,9 @@ function SkiEngine()
             if (this.landPoint[0] > this.currentBest) {
                 this.ustawRekord(this.landPoint[0],this.landPoint[1]);
                 this.ustawRekordziste(this.myName);
+            }
+            if (this.landPoint[0] > this.currentMyBest) {
+                this.ustawMojRekord(this.landPoint[0],this.landPoint[1]);
             }
         }
     };
